@@ -35,7 +35,7 @@ public class TileManager {
             tile[1].image = ImageIO.read(getClass().getResourceAsStream("/tiles/wall.png")); //wall
             tile[1].collision = true; // hier wird die collision gesetzt
 
-            tile[2] = new Tile();
+            tile[2] = new Tile();//
             tile[2].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water.png")); // water
             tile[2].collision = true;
 
