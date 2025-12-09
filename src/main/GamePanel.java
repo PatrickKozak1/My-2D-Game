@@ -47,6 +47,7 @@ public class GamePanel extends JPanel implements  Runnable {
     public int gameState;
     public final int playState = 1;
     public final int pauseState = 2;
+    public final int dialogState = 3;
 
     public  GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -194,13 +195,13 @@ public class GamePanel extends JPanel implements  Runnable {
         g2.dispose();
     }
     public void playMusic(int i){
-        music.setFile(i);
-        music.play();
-        music.loop();
+//        music.setFile(i);
+//        music.play();
+//        music.loop();
     }
 
     public void stopMusic(){
-        music.stop();
+//        music.stop();
     }
     public void playSE(int i){
         se.setFile(i);
