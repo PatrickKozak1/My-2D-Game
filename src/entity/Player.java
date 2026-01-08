@@ -25,7 +25,7 @@ public class Player extends Entity {
 
         this.keyH = keyH;
 
-        screenX = gp.screenWidth/2 - (gp.tileSize/2); // hier lassen wir den player in der mitte der map spwanen
+        screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
 
         solidArea = new Rectangle();
@@ -39,15 +39,15 @@ public class Player extends Entity {
         setDefaultValues();
         getPlayerImage();
     }
-    public void setDefaultValues(){
 
+    public void setDefaultValues(){
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
         speed = 4;
         direction = "down";
     }
-    public void getPlayerImage(){
 
+    public void getPlayerImage(){
         up1 = setup("/player/boy_up_1");
         up2 = setup("/player/boy_up_2");
         down1 = setup("/player/boy_down_1");
@@ -58,7 +58,7 @@ public class Player extends Entity {
         right2 = setup("/player/boy_right_2");
     }
 
-    public  void update(){
+    public void update(){
 
         if (moving == false){
             if (keyH.upPressed == true || keyH.downPressed == true
@@ -74,9 +74,7 @@ public class Player extends Entity {
                     direction = "right";
                 }
 
-                moving = true;
-
-                // CHECK TILE COLLISION
+                // CHECK TILE COLLISION VOR der Bewegung
                 collisionON = false;
                 gp.cChecker.checkTile(this);
 
@@ -88,22 +86,28 @@ public class Player extends Entity {
                 int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
                 interactNPC(npcIndex);
 
+                // Wenn KEINE Kollision, dann darf der Spieler sich bewegen
+                if (collisionON == false){
+                    moving = true;
+                }
             }
             else {
                 standCounter++;
-
                 if (standCounter == 20){
-                    spriteNum =   1;
+                    spriteNum = 1;
                     standCounter = 0;
                 }
-
             }
         }
+
         if (moving == true){
+            // Nochmal vor der Bewegung prüfen (für den Fall dass NPC sich bewegt hat)
+            collisionON = false;
+            gp.cChecker.checkTile(this);
+            gp.cChecker.checkEntity(this, gp.npc);
 
-            // IF COLLISION IS FALSE , PLAYER CAN MOVE
+            // Nur bewegen wenn keine Kollision
             if (collisionON == false){
-
                 switch (direction){
                     case "up":
                         worldY -= speed;
@@ -118,6 +122,10 @@ public class Player extends Entity {
                         worldX += speed;
                         break;
                 }
+            } else {
+                // Wenn Kollision während Bewegung -> sofort stoppen
+                moving = false;
+                pixelCounter = 0;
             }
 
             spriteCounter++;
@@ -129,7 +137,10 @@ public class Player extends Entity {
                 }
                 spriteCounter = 0;
             }
-            pixelCounter += speed;
+
+            if (collisionON == false){
+                pixelCounter += speed;
+            }
 
             if (pixelCounter == 48){
                 moving = false;
@@ -139,25 +150,22 @@ public class Player extends Entity {
     }
 
     public void pickupObject(int i){
-
-        if (i !=  999){
-
-
+        if (i != 999){
+            // TODO: Object pickup logic
         }
     }
 
     public void interactNPC(int i){
-
-        if (i !=  999){
-            gp.gameState = gp.dialogState;
-            gp.npc[i].speak();
+        if (i != 999){
+            if (gp.keyH.enterPressed == true){
+                gp.gameState = gp.dialogState;
+                gp.npc[i].speak();
+            }
         }
+        gp.keyH.enterPressed = false;
     }
 
     public void draw(Graphics2D g2){
-//        g2.setColor(Color.white);
-//        g2.fillRect(x,y, gp.tileSize, gp.tileSize);
-
         BufferedImage image = null;
 
         switch (direction){
@@ -184,7 +192,6 @@ public class Player extends Entity {
                 if (spriteNum == 2){
                     image = left2;
                 }
-
                 break;
             case "right":
                 if (spriteNum == 1){
@@ -193,11 +200,10 @@ public class Player extends Entity {
                 if (spriteNum == 2){
                     image = right2;
                 }
-
                 break;
         }
-        g2.drawImage(image, screenX,screenY, null);
-        g2.setColor(Color.red);
-        //g2.drawRect(screenX + solidArea.x, screenY +solidArea.y,solidArea.width, solidArea.height);
+        g2.drawImage(image, screenX, screenY, null);
+        // g2.setColor(Color.red);
+        // g2.drawRect(screenX + solidArea.x, screenY +solidArea.y,solidArea.width, solidArea.height);
     }
 }

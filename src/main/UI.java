@@ -2,15 +2,18 @@ package main;
 
 import object.OBJ_Key;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 
 public class UI {
 
     GamePanel gp;
     Graphics2D g2;
-    Font arial_40, arial_80B;
+    Font purisaB;
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
@@ -21,8 +24,15 @@ public class UI {
     public UI(GamePanel gp){
         this.gp = gp;
 
-        arial_40 = new Font("Arial", Font.PLAIN, 40);
-        arial_80B = new Font("Arial", Font.BOLD, 80);
+
+        try {
+            InputStream is = getClass().getResourceAsStream("/font/GomePixel-DYJX1.otf");
+            purisaB = Font.createFont(Font.TRUETYPE_FONT, is);
+        } catch (FontFormatException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void showMessage(String text){
@@ -34,7 +44,7 @@ public class UI {
 
         this.g2 = g2;
 
-        g2.setFont(arial_40);
+        g2.setFont(purisaB);
         g2.setColor(Color.WHITE);
 
         // PLAY STATE
@@ -72,10 +82,16 @@ public class UI {
 
         drawSubWindow(x,y,width,height);
 
-        g2.setFont(g2.getFont().deriveFont(Font.PLAIN,32F));
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN,26F));
         x += gp.tileSize;
         y += gp.tileSize;
-        g2.drawString(currentDialogue, x,y);
+
+        for (String line:currentDialogue.split("\n")){
+            g2.drawString(line, x,y);
+            y += 40;
+
+        }
+
     }
 
     public void drawSubWindow(int x, int y, int width, int height){

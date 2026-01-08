@@ -30,7 +30,7 @@ public class GamePanel extends JPanel implements  Runnable {
     int FPS = 60;
 
     TileManager tileM = new TileManager(this);
-    KeyHandler keyH = new KeyHandler(this);
+    public KeyHandler keyH = new KeyHandler(this);
     Sound music = new Sound();
     Sound se = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
@@ -45,6 +45,7 @@ public class GamePanel extends JPanel implements  Runnable {
 
     // GAME STATE
     public int gameState;
+    public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogState = 3;
@@ -161,6 +162,11 @@ public class GamePanel extends JPanel implements  Runnable {
             drawStart = System.nanoTime();
         }
 
+        // Title SCREEN
+        if (gameState == titleState) {
+
+        }
+        //
 
         // Title
         tileM.draw(g2);
