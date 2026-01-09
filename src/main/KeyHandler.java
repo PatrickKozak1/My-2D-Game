@@ -2,6 +2,7 @@ package main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.security.Key;
 
 public class KeyHandler implements KeyListener {
 
@@ -22,6 +23,25 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
 
         int code = e.getKeyCode();
+
+        // TITLE STATE
+        if (gp.gameState == gp.titleState){
+            if (code == KeyEvent.VK_UP){
+                gp.ui.commandNum--;
+                if (gp.ui.commandNum < 0){
+                    gp.ui.commandNum = 2;
+                }
+            }
+            if (code == KeyEvent.VK_DOWN){
+                gp.ui.commandNum++;
+                if (gp.ui.commandNum > 2){
+                    gp.ui.commandNum = 0;
+                }
+            }
+            if (code == KeyEvent.VK_ENTER){
+
+            }
+        }
 
         // PLAY STATE
         if (gp.gameState == gp.playState){

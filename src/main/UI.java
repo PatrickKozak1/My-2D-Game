@@ -19,7 +19,7 @@ public class UI {
     int messageCounter = 0;
     public boolean gameFinished = false;
     public String currentDialogue = "";
-
+    public int commandNum = 0;
 
     public UI(GamePanel gp){
         this.gp = gp;
@@ -47,6 +47,11 @@ public class UI {
         g2.setFont(purisaB);
         g2.setColor(Color.WHITE);
 
+        //TITLE STATE
+        if (gp.gameState == gp.titleState){
+            drawTitleScreen();
+        }
+
         // PLAY STATE
         if (gp.gameState == gp.playState){
             // Do playState stuff later
@@ -59,6 +64,57 @@ public class UI {
         // DIALOGUE STATA
         if (gp.gameState == gp.dialogState){
             drawDialogueScreen();
+        }
+    }
+
+    public void drawTitleScreen(){
+
+        g2.setColor(new Color(0,0,0));
+        g2.fillRect(0,0,gp.screenWidth, gp.screenHeight);
+
+        //TITLE NAME
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD,76F));
+        String text =  "Blue Boy Adventure";
+        int x = getXForCenteredText(text);
+        int y  = gp.tileSize*3;
+
+        // SHADOW
+        g2.setColor(Color.gray);
+        g2.drawString(text,x+5,y+5);
+        // MAIN COLOR
+        g2.setColor(Color.white);
+        g2.drawString(text,x,y);
+
+        // BLUE BOY IMAGE
+        x = gp.screenWidth/2 - (gp.tileSize*2)/2;
+        y += gp.tileSize*2;
+        g2.drawImage(gp.player.down1,x,y,gp.tileSize*2,gp.tileSize*2,null);
+
+        // MENU
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD,38F));
+
+        text = "NEW GAME";
+        x = getXForCenteredText(text);
+        y  += gp.tileSize*3.5;
+        g2.drawString(text,x,y);
+        if (commandNum == 0){
+            g2.drawString(">",x-gp.tileSize,y);
+        }
+
+        text = "LOAD GAME";
+        x = getXForCenteredText(text);
+        y  += gp.tileSize;
+        g2.drawString(text,x,y);
+        if (commandNum == 1){
+            g2.drawString(">",x-gp.tileSize,y);
+        }
+
+        text = "QUIT";
+        x = getXForCenteredText(text);
+        y  += gp.tileSize;
+        g2.drawString(text,x,y);
+        if (commandNum == 2){
+            g2.drawString(">",x-gp.tileSize,y);
         }
     }
 
