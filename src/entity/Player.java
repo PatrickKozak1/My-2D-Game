@@ -63,6 +63,14 @@ public class Player extends Entity {
     }
 
     public void update(){
+        if (life <= 0) {
+            if (gp.gameState != gp.gameOverState) {
+                gp.gameState = gp.gameOverState;
+                gp.ui.commandNum = 0;
+            }
+            return;
+        }
+
 
         if (moving == false){
             if (keyH.upPressed == true || keyH.downPressed == true
@@ -92,6 +100,7 @@ public class Player extends Entity {
 
                 // CHECK EVENT
                 gp.eHandler.checkEvent();
+                gp.keyH.enterPressed = false;
 
                 // Wenn KEINE Kollision, dann darf der Spieler sich bewegen
                 if (collisionON == false){
@@ -169,7 +178,7 @@ public class Player extends Entity {
                 gp.npc[i].speak();
             }
         }
-        gp.keyH.enterPressed = false;
+
     }
 
     public void draw(Graphics2D g2){
@@ -213,4 +222,6 @@ public class Player extends Entity {
         // g2.setColor(Color.red);
         // g2.drawRect(screenX + solidArea.x, screenY +solidArea.y,solidArea.width, solidArea.height);
     }
+
+
 }

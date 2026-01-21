@@ -50,6 +50,7 @@ public class GamePanel extends JPanel implements  Runnable {
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogState = 3;
+    public final int gameOverState = 6;
 
     public  GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -133,6 +134,19 @@ public class GamePanel extends JPanel implements  Runnable {
 
         }
     }
+
+    // In GamePanel.java
+    public void retry() {
+        player.setDefaultValues(); // Setzt Leben, Position etc. des Spielers zurück
+
+         aSetter.setObject();
+         aSetter.setNpc();
+
+        gameState = playState;
+        ui.commandNum = 0;
+    }
+
+
     public  void update(){
 
         if (gameState == playState){
@@ -150,6 +164,46 @@ public class GamePanel extends JPanel implements  Runnable {
             // nothing
         }
 
+        if (gameState == gameOverState) {
+            if (keyH.upPressed == true) {
+                ui.commandNum--;
+                if (ui.commandNum < 0) {
+                    ui.commandNum = 1;
+                }
+                keyH.upPressed = false;
+            }
+            if (keyH.downPressed == true) {
+                ui.commandNum++;
+                if (ui.commandNum > 1) {
+                    ui.commandNum = 0;
+                }
+                keyH.downPressed = false;
+            }
+            if (gameState == gameOverState) {
+                if (keyH.upPressed == true) {
+                    ui.commandNum--;
+                    if (ui.commandNum < 0) {
+                        ui.commandNum = 1;
+                    }
+                    keyH.upPressed = false;
+                }
+                if (keyH.downPressed == true) {
+                    ui.commandNum++;
+                    if (ui.commandNum > 1) {
+                        ui.commandNum = 0;
+                    }
+                    keyH.downPressed = false;
+                }
+                if (keyH.enterPressed == true) {
+                    if (ui.commandNum == 0) {
+                        retry();
+                    } else if (ui.commandNum == 1) {
+                        System.exit(0);
+                    }
+                    keyH.enterPressed = false;
+                }
+            }
+        }
 
     }
     public void paintComponent(Graphics g){
@@ -182,7 +236,12 @@ public class GamePanel extends JPanel implements  Runnable {
             // NPC
             for (int i = 0; i < npc.length; i++){
                 if (npc[i] != null){
+                    player.draw(g2);
                     npc[i].draw(g2);
+                }
+                else {
+                    npc[i].draw(g2);
+                    player.draw(g2);
                 }
             }
             // Player

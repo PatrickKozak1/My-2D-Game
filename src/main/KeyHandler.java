@@ -139,6 +139,31 @@ public class KeyHandler implements KeyListener {
                 gp.gameState = gp.playState;
             }
         }
+
+        else if (gp.gameState == gp.gameOverState){
+            if (code == KeyEvent.VK_UP){
+                gp.ui.commandNum--;
+                if (gp.ui.commandNum < 0){
+                    gp.ui.commandNum = 1; // 0 = Retry, 1 = Quit
+                }
+            }
+            if (code == KeyEvent.VK_DOWN){
+                gp.ui.commandNum++;
+                if (gp.ui.commandNum > 1){
+                    gp.ui.commandNum = 0; // 0 = Retry, 1 = Quit
+                }
+            }
+            if (code == KeyEvent.VK_ENTER){
+                if (gp.ui.commandNum == 0){
+                    // Retry
+                    gp.retry();
+                }
+                if (gp.ui.commandNum == 1){
+                    // Quit
+                    System.exit(0);
+                }
+            }
+        }
     }
 
     @Override
