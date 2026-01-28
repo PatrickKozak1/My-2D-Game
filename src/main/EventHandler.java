@@ -49,9 +49,9 @@ public class EventHandler {
             if (hit(27,16,"right") == true){
                 damagePit(27,16,gp.dialogState);
             }
-//            if (hit(23,19,"any") == true){
-//                damagePit(27,16,gp.dialogState);
-//            }
+//        if (hit(23,19,"any") == true){
+//           damagePit(27,16,gp.dialogState);
+//        }
 //        if (hit(27,16,"right") == true){
 //           teleport(gp.dialogState);
 //       }
@@ -99,7 +99,7 @@ public class EventHandler {
         gp.gameState = gameState;
         gp.ui.currentDialogue = "You fall into a pit";
         gp.player.life -= 1;
-//        eventRect[col][row].eventDone = true;
+        eventRect[col][row].eventDone = true;
         canTouchEvent = false;
     }
     public void healingPool(int col,int row,int gameState){

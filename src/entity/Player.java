@@ -98,6 +98,8 @@ public class Player extends Entity {
                 int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
                 interactNPC(npcIndex);
 
+                int mosterIndex = gp.cChecker.checkEntity(this, gp.monster);
+
                 // CHECK EVENT
                 gp.eHandler.checkEvent();
                 gp.keyH.enterPressed = false;
