@@ -14,9 +14,9 @@ public class OBJ_Heart extends Entity {
         super(gp);
 
         name = "Heart";
-        image = setup("/objects/heart_full.png");
-        image2 = setup("/objects/heart_half.png");
-        image3 = setup("/objects/heart_blank.png");
+        image = setup("/objects/heart_full",gp.tileSize,gp.tileSize);
+        image2 = setup("/objects/heart_half",gp.tileSize,gp.tileSize);
+        image3 = setup("/objects/heart_blank",gp.tileSize,gp.tileSize);
 
     }
 }
