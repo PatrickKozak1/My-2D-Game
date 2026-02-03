@@ -29,12 +29,12 @@ public class Player extends Entity {
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
 
         solidArea = new Rectangle();
-        solidArea.x = 1;
-        solidArea.y = 1;
+        solidArea.x = 6;
+        solidArea.y = 9;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-        solidArea.width = 46;
-        solidArea.height = 46;
+        solidArea.width = 33;
+        solidArea.height = 34;
 
         setDefaultValues();
         getPlayerImage();
@@ -98,13 +98,15 @@ public class Player extends Entity {
                 int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
                 interactNPC(npcIndex);
 
-                int mosterIndex = gp.cChecker.checkEntity(this, gp.monster);
+                // CHECK MONSTER COLLISION
+                int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
+                contactMonster(monsterIndex);
 
                 // CHECK EVENT
                 gp.eHandler.checkEvent();
                 gp.keyH.enterPressed = false;
 
-                // Wenn KEINE Kollision, dann darf der Spieler sich bewegen
+
                 if (collisionON == false){
                     moving = true;
                 }
@@ -119,12 +121,13 @@ public class Player extends Entity {
         }
 
         if (moving == true){
-            // Nochmal vor der Bewegung prüfen (für den Fall dass NPC sich bewegt hat)
+
             collisionON = false;
             gp.cChecker.checkTile(this);
             gp.cChecker.checkEntity(this, gp.npc);
+            gp.cChecker.checkEntity(this, gp.monster);
 
-            // Nur bewegen wenn keine Kollision
+
             if (collisionON == false){
                 switch (direction){
                     case "up":
@@ -141,7 +144,7 @@ public class Player extends Entity {
                         break;
                 }
             } else {
-                // Wenn Kollision während Bewegung -> sofort stoppen
+
                 moving = false;
                 pixelCounter = 0;
             }
@@ -164,7 +167,18 @@ public class Player extends Entity {
                 moving = false;
                 pixelCounter = 0;
             }
+
         }
+
+        //This needs to be outside of  key if statement!
+        if (invincible == true){
+            invincibleCounter++;
+            if (invincibleCounter > 60){
+                invincible = false;
+                invincibleCounter = 0;
+            }
+        }
+
     }
 
     public void pickupObject(int i){
@@ -181,6 +195,16 @@ public class Player extends Entity {
             }
         }
 
+    }
+
+    public void contactMonster(int i){
+        if (i != 999){
+
+            if (invincible == false){
+                life -= 1;
+                invincible =  true;
+            }
+        }
     }
 
     public void draw(Graphics2D g2){
@@ -221,8 +245,14 @@ public class Player extends Entity {
                 break;
         }
         g2.drawImage(image, screenX, screenY, null);
-        // g2.setColor(Color.red);
+
+        //DEBUG
+        g2.setFont(new Font("Arial", Font.PLAIN,26));
+        g2.setColor(Color.white);
+        g2.drawString("Invincible:"+invincibleCounter,10,400);
         // g2.drawRect(screenX + solidArea.x, screenY +solidArea.y,solidArea.width, solidArea.height);
+        g2.setColor(Color.RED);
+        g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
     }
 
 

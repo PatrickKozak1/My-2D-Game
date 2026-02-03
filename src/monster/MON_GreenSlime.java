@@ -3,10 +3,16 @@ package monster;
 import entity.Entity;
 import main.GamePanel;
 
-import java.util.Random;
+import java.awt.*;
+import java.awt.image.BufferedImage;import java.util.Random;
+
 
 public class MON_GreenSlime extends Entity {
+
+
     public MON_GreenSlime(GamePanel gp) {
+
+
         super(gp);
 
         name = "Green Slime";
@@ -14,12 +20,15 @@ public class MON_GreenSlime extends Entity {
         maxLife = 4;
         life = maxLife;
 
+
         solidArea.x = 3;
-        solidArea.y = 10;
+        solidArea.y = 18;
         solidArea.width = 42;
         solidArea.height = 30;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
+
+
 
         getImage();
     }
@@ -55,6 +64,9 @@ public class MON_GreenSlime extends Entity {
             }
             actionLockCounter = 0;
         }
+
+
+
     }
 
 

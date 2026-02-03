@@ -169,51 +169,13 @@ public class GamePanel extends JPanel implements  Runnable {
                     monster[i].update();
                 }
             }
+
+
         }
         if (gameState == pauseState){
             // nothing
         }
 
-        if (gameState == gameOverState) {
-            if (keyH.upPressed == true) {
-                ui.commandNum--;
-                if (ui.commandNum < 0) {
-                    ui.commandNum = 1;
-                }
-                keyH.upPressed = false;
-            }
-            if (keyH.downPressed == true) {
-                ui.commandNum++;
-                if (ui.commandNum > 1) {
-                    ui.commandNum = 0;
-                }
-                keyH.downPressed = false;
-            }
-            if (gameState == gameOverState) {
-                if (keyH.upPressed == true) {
-                    ui.commandNum--;
-                    if (ui.commandNum < 0) {
-                        ui.commandNum = 1;
-                    }
-                    keyH.upPressed = false;
-                }
-                if (keyH.downPressed == true) {
-                    ui.commandNum++;
-                    if (ui.commandNum > 1) {
-                        ui.commandNum = 0;
-                    }
-                    keyH.downPressed = false;
-                }
-                if (keyH.enterPressed == true) {
-                    if (ui.commandNum == 0) {
-                        retry();
-                    } else if (ui.commandNum == 1) {
-                        System.exit(0);
-                    }
-                    keyH.enterPressed = false;
-                }
-            }
-        }
 
     }
     public void paintComponent(Graphics g){

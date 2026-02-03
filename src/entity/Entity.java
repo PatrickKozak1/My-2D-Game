@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class Entity {
 
-    GamePanel gp;
+     GamePanel gp;
     public int worldX, worldY;
     public int speed;
 
@@ -23,6 +23,8 @@ public class Entity {
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionON = false;
     public int actionLockCounter = 0;
+    public boolean invincible = false;
+    public int invincibleCounter = 0;
     String dialogues[] = new String[20];
     public BufferedImage image, image2,image3;
     public String name;
@@ -110,9 +112,29 @@ public class Entity {
     public void draw(Graphics2D g2){
 
         BufferedImage image = null;
+        switch (direction) {
+            case "up": image = (spriteNum == 1) ? up1 : up2; break;
+            case "down": image = (spriteNum == 1) ? down1 : down2; break;
+            case "left": image = (spriteNum == 1) ? left1 : left2; break;
+            case "right": image = (spriteNum == 1) ? right1 : right2; break;
+        }
+
+
         int screenX = worldX - gp.player.worldX + gp.player.screenX;
         int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
+
+
+        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+
+        // 🔴 HITBOX DEBUG
+        g2.setColor(Color.RED);
+        g2.drawRect(
+                screenX + solidArea.x,
+                screenY + solidArea.y,
+                solidArea.width,
+                solidArea.height
+        );
         if (worldX  + gp.tileSize > gp.player.worldX - gp.player.screenX &&
                 worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
                 worldY + gp.tileSize > gp.player.worldY -gp.player.screenY &&
