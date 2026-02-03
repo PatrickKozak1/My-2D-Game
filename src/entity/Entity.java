@@ -30,6 +30,7 @@ public class Entity {
     public String name;
     public boolean collision = false;
     int dialogueIndex = 0;
+    public int type; // 0 = player, 1 = npc, 2 = monster
 
     // CHARACTER STATUS
     public int maxLife;
@@ -76,7 +77,15 @@ public class Entity {
         gp.cChecker.checkObject(this,false);
         gp.cChecker.checkEntity(this, gp.npc);
         gp.cChecker.checkEntity(this,gp.monster);
-        gp.cChecker.checkPlayer(this);
+        boolean contactPlayer =  gp.cChecker.checkPlayer(this);
+
+        if (this.type == 2 && contactPlayer == true){
+            if (gp.player.invincible == false){
+                // we can give damage
+                gp.player.life -= 1;
+                gp.player.invincible = true;
+            }
+        }
 
         // IF COLLISION IS FALSE , PLAYER CAN MOVE
         if (collisionON == false){
@@ -112,12 +121,12 @@ public class Entity {
     public void draw(Graphics2D g2){
 
         BufferedImage image = null;
-        switch (direction) {
-            case "up": image = (spriteNum == 1) ? up1 : up2; break;
-            case "down": image = (spriteNum == 1) ? down1 : down2; break;
-            case "left": image = (spriteNum == 1) ? left1 : left2; break;
-            case "right": image = (spriteNum == 1) ? right1 : right2; break;
-        }
+//        switch (direction) {
+//            case "up": image = (spriteNum == 1) ? up1 : up2; break;
+//            case "down": image = (spriteNum == 1) ? down1 : down2; break;
+//            case "left": image = (spriteNum == 1) ? left1 : left2; break;
+//            case "right": image = (spriteNum == 1) ? right1 : right2; break;
+//        }
 
 
         int screenX = worldX - gp.player.worldX + gp.player.screenX;
@@ -128,13 +137,13 @@ public class Entity {
         g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 
         // 🔴 HITBOX DEBUG
-        g2.setColor(Color.RED);
-        g2.drawRect(
-                screenX + solidArea.x,
-                screenY + solidArea.y,
-                solidArea.width,
-                solidArea.height
-        );
+//        g2.setColor(Color.RED);
+//        g2.drawRect(
+//                screenX + solidArea.x,
+//                screenY + solidArea.y,
+//                solidArea.width,
+//                solidArea.height
+//        );
         if (worldX  + gp.tileSize > gp.player.worldX - gp.player.screenX &&
                 worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
                 worldY + gp.tileSize > gp.player.worldY -gp.player.screenY &&

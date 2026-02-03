@@ -244,15 +244,22 @@ public class Player extends Entity {
                 }
                 break;
         }
+
+        if (invincible  == true){
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+        }
         g2.drawImage(image, screenX, screenY, null);
 
+        // Reset  alpha
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
         //DEBUG
-        g2.setFont(new Font("Arial", Font.PLAIN,26));
-        g2.setColor(Color.white);
-        g2.drawString("Invincible:"+invincibleCounter,10,400);
-        // g2.drawRect(screenX + solidArea.x, screenY +solidArea.y,solidArea.width, solidArea.height);
-        g2.setColor(Color.RED);
-        g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+//        g2.setFont(new Font("Arial", Font.PLAIN,26));
+//        g2.setColor(Color.white);
+//        g2.drawString("Invincible:"+invincibleCounter,10,400);
+//        g2.drawRect(screenX + solidArea.x, screenY +solidArea.y,solidArea.width, solidArea.height);
+//        g2.setColor(Color.RED);
+//        g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
     }
 
 
