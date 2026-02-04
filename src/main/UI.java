@@ -49,6 +49,7 @@ public class UI {
 
 
     public void drawGameOverScreen() {
+        gp.playSE(11);
         g2.setColor(new Color(0, 0,0, 90));
         g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
