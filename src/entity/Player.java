@@ -3,6 +3,8 @@ package entity;
 import main.GamePanel;
 import main.KeyHandler;
 import main.UtilityTool;
+import object.OBJ_Shield_Wood;
+import object.OBJ_Sword_Normal;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -19,6 +21,7 @@ public class Player extends Entity {
     int  standCounter = 0;
     boolean moving =   false;
     int pixelCounter = 0;
+    public boolean  attackCanceled =  false;
 
     public Player(GamePanel gp, KeyHandler keyH){
         super(gp);
@@ -51,8 +54,26 @@ public class Player extends Entity {
         direction = "down";
 
         // PLAYER STATUS
+        level = 1;
         maxLife = 6;
         life = maxLife;
+        strength = 1;
+        dexterity = 1;
+        exp = 0;
+        nextLevelExp = 5;
+        coin = 0;
+        currentWeapon = new OBJ_Sword_Normal(gp);
+        currentShield = new OBJ_Shield_Wood(gp);
+        attack = getAttack();
+        defense = getDefense();
+    }
+
+    private int getAttack() {
+        return attack = strength * currentWeapon.attackValue;
+    }
+
+    private int getDefense() {
+        return defense = dexterity * currentShield.defenseValue;
     }
 
     public void getPlayerImage(){
@@ -187,6 +208,13 @@ public class Player extends Entity {
             }
 
         }
+
+        if (keyH.enterPressed == true && attackCanceled == false){
+            attacking = true;
+            spriteCounter = 0;
+        }
+
+        attackCanceled = false;
         gp.keyH.enterPressed = false;
 
         //This needs to be outside of  key if statement!
@@ -270,18 +298,12 @@ public class Player extends Entity {
 
         if (gp.keyH.enterPressed == true) {
             if (i != 999) {
-
+                attackCanceled = true;
                 gp.gameState = gp.dialogState;
                 gp.npc[i].speak();
 
-            } else {
-
-                attacking = true;
-
             }
         }
-
-
     }
 
     public void contactMonster(int i){
