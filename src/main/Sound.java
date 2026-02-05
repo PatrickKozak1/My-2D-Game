@@ -8,7 +8,7 @@ import java.net.URL;
 public class Sound {
 
     Clip clip;
-    URL soundURL[] = new URL[30];
+    URL soundURL[] = new URL[35];
 
     public Sound() {
         soundURL[0] = getClass().getResource("/sound/blocked.wav");
@@ -33,6 +33,7 @@ public class Sound {
         soundURL[19] = getClass().getResource("/sound/speak.wav");
         soundURL[20] = getClass().getResource("/sound/stairs.wav");
         soundURL[21] = getClass().getResource("/sound/unlock.wav");
+        soundURL[22] = getClass().getResource("/sound/216675__hitrison__stick-swoosh-whoosh.wav");
     }
 
     public void setFile(int i){
