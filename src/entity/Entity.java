@@ -43,8 +43,9 @@ public class Entity {
     // CHARACTER STATUS
     public int maxLife;
     public int life;
-    public int maxMama;
-    public int mama;
+    public int maxMana;
+    public int mana;
+    public int ammo;
     public int level;
     public int strength;
     public int dexterity;
@@ -83,7 +84,17 @@ public class Entity {
     }
 
     public void damageReaction(){
+        if (gp.player.invincible == false){
+            // we can give damage
+            gp.playSE(17);
+            int damage =  attack - gp.player.defense;
+            if (damage < 0) {
+                damage = 0;
+            }
+            gp.player.life -= damage;
 
+            gp.player.invincible = true;
+        }
     }
 
     public void speak(){
@@ -122,17 +133,7 @@ public class Entity {
         boolean contactPlayer =  gp.cChecker.checkPlayer(this);
 
         if (this.type == type_monster && contactPlayer == true){
-            if (gp.player.invincible == false){
-                // we can give damage
-                gp.playSE(17);
-                int damage =  attack - gp.player.defense;
-                if (damage < 0) {
-                    damage = 0;
-                }
-                gp.player.life -= damage;
-
-                gp.player.invincible = true;
-            }
+            damagePlayer(attack);
         }
 
         // IF COLLISION IS FALSE , PLAYER CAN MOVE
@@ -172,6 +173,24 @@ public class Entity {
             }
         }
 
+        if (shotAvailableCounter < 30) {
+            shotAvailableCounter++;
+        }
+
+    }
+
+    public void damagePlayer(int attack){
+        if (gp.player.invincible == false){
+            // we can give damage
+            gp.playSE(17);
+            int damage =  attack - gp.player.defense;
+            if (damage < 0) {
+                damage = 0;
+            }
+            gp.player.life -= damage;
+
+            gp.player.invincible = true;
+        }
     }
 
     public void draw(Graphics2D g2){
@@ -205,24 +224,25 @@ public class Entity {
                 worldY + gp.tileSize > gp.player.worldY -gp.player.screenY &&
                 worldY - gp.tileSize < gp.player.worldY + gp.player.screenY){
 
-            switch (direction){
-                case "up":
-                    if (spriteNum == 1){ image = up1;}
-                    if (spriteNum == 2){ image = up2;}
-                    break;
-                case "down":
-                    if (spriteNum == 1){image = down1;}
-                    if (spriteNum == 2){image = down2;}
-                    break;
-                case  "left":
-                    if (spriteNum == 1){image = left1;}
-                    if (spriteNum == 2){image = left2;}
-                    break;
-                case "right":
-                    if (spriteNum == 1){image = right1;}
-                    if (spriteNum == 2){image = right2;}
-                    break;
-            }
+                switch (direction){
+                    case "up":
+                        if (spriteNum == 1){ image = up1;}
+                        if (spriteNum == 2){ image = up2;}
+                        break;
+                    case "down":
+                        if (spriteNum == 1){image = down1;}
+                        if (spriteNum == 2){image = down2;}
+                        break;
+                    case  "left":
+                        if (spriteNum == 1){image = left1;}
+                        if (spriteNum == 2){image = left2;}
+                        break;
+                    case "right":
+                        if (spriteNum == 1){image = right1;}
+                        if (spriteNum == 2){image = right2;}
+                        break;
+                }
+
             // MONSTER HP  bar
             if (type == 2 && hpBarON == true){
 
