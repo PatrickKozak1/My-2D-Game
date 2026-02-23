@@ -168,10 +168,12 @@ public class Player extends Entity {
                 int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
                 contactMonster(monsterIndex);
 
+                // CHECK INTERACTIVE TILE COLLISION
+                int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
+
+
                 // CHECK EVENT
                 gp.eHandler.checkEvent();
-
-
 
                 if (collisionON == false){
                     moving = true;
@@ -192,6 +194,7 @@ public class Player extends Entity {
             gp.cChecker.checkTile(this);
             gp.cChecker.checkEntity(this, gp.npc);
             gp.cChecker.checkEntity(this, gp.monster);
+            gp.cChecker.checkEntity(this, gp.iTile);
 
 
             if (collisionON == false && keyH.enterPressed == false){
@@ -312,6 +315,9 @@ public class Player extends Entity {
             int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
             damageMonster(monsterIndex, attack);
 
+            int iTileIndex = gp.cChecker.checkEntity(this,gp.iTile);
+            damageInteractiveTile(iTileIndex);
+
             // After checking collision, resotre the original data
             worldX = currentWorldX;
             worldY = currentWorldY;
@@ -323,6 +329,23 @@ public class Player extends Entity {
             spriteNum = 1;
             spriteCounter = 0;
             attacking = false;
+        }
+    }
+
+    private void damageInteractiveTile(int i) {
+        if (i != 999 && gp.iTile[i].destructible == true
+                && gp.iTile[i].isCorrectItem(this) == true && gp.iTile[i].invincible == false){
+            gp.iTile[i].playSE();
+            gp.iTile[i].life--;
+            gp.iTile[i].invincible =  true;
+
+            // Generate particle
+            generateParticle(gp.iTile[i], gp.iTile[i]);
+
+            if (gp.iTile[i].life == 0){
+                gp.iTile[i] = gp.iTile[i].getDestroyFrom();
+            }
+
         }
     }
 
