@@ -150,7 +150,7 @@ public class UI {
     private void drawInventory() {
 
         // FRAME
-        int frameX = gp.tileSize*9;
+        int frameX = gp.tileSize*12;
         int frameY = gp.tileSize;
         int frameWidth = gp.tileSize * 6;
         int frameHeight = gp.tileSize * 5;
@@ -357,50 +357,49 @@ public class UI {
                 g2.drawString(">",x-gp.tileSize,y);
             }
         }
-        else if (titleScreenState == 1){
-
-            // CLASS SELECTION SCREEN
-            g2.setColor(Color.WHITE);
-            g2.setFont(g2.getFont().deriveFont(42F));
-
-            String text = "Select your Class!";
-            int x = getXForCenteredText(text);
-            int y = gp.tileSize * 3;
-            g2.drawString(text,x,y);
-
-            text = "Fighter";
-            x = getXForCenteredText(text);
-            y += gp.tileSize;
-            g2.drawString(text,x,y);
-            if (commandNum == 0){
-                g2.drawString(">", x-gp.tileSize, y);
-            }
-
-            text = "Thief";
-            x = getXForCenteredText(text);
-            y += gp.tileSize;
-            g2.drawString(text,x,y);
-            if (commandNum == 1){
-                g2.drawString(">", x-gp.tileSize, y);
-            }
-
-            text = "Sorcerer";
-            x = getXForCenteredText(text);
-            y += gp.tileSize;
-            g2.drawString(text,x,y);
-            if (commandNum == 2){
-                g2.drawString(">", x-gp.tileSize, y);
-            }
-
-            text = "Back";
-            x = getXForCenteredText(text);
-            y += gp.tileSize*2;
-            g2.drawString(text,x,y);
-            if (commandNum == 3){
-                g2.drawString(">", x-gp.tileSize, y);
-            }
-        }
-
+//        else if (titleScreenState == 1){
+//
+//            // CLASS SELECTION SCREEN
+//            g2.setColor(Color.WHITE);
+//            g2.setFont(g2.getFont().deriveFont(42F));
+//
+//            String text = "Select your Class!";
+//            int x = getXForCenteredText(text);
+//            int y = gp.tileSize * 3;
+//            g2.drawString(text,x,y);
+//
+//            text = "Fighter";
+//            x = getXForCenteredText(text);
+//            y += gp.tileSize;
+//            g2.drawString(text,x,y);
+//            if (commandNum == 0){
+//                g2.drawString(">", x-gp.tileSize, y);
+//            }
+//
+//            text = "Thief";
+//            x = getXForCenteredText(text);
+//            y += gp.tileSize;
+//            g2.drawString(text,x,y);
+//            if (commandNum == 1){
+//                g2.drawString(">", x-gp.tileSize, y);
+//            }
+//
+//            text = "Sorcerer";
+//            x = getXForCenteredText(text);
+//            y += gp.tileSize;
+//            g2.drawString(text,x,y);
+//            if (commandNum == 2){
+//                g2.drawString(">", x-gp.tileSize, y);
+//            }
+//
+//            text = "Back";
+//            x = getXForCenteredText(text);
+//            y += gp.tileSize*2;
+//            g2.drawString(text,x,y);
+//            if (commandNum == 3){
+//                g2.drawString(">", x-gp.tileSize, y);
+//            }
+//        }
     }
 
     public void drawPauseScreen() {
@@ -437,7 +436,7 @@ public class UI {
 
     private void drawCharacterScreen() {
 
-        final int frameX = gp.tileSize;
+        final int frameX = gp.tileSize*2;
         final int frameY = gp.tileSize;
         final int frameWidth = gp.tileSize * 5;
         final int frameHeight = gp.tileSize * 10;
