@@ -34,6 +34,7 @@ public class GamePanel extends JPanel implements  Runnable {
     int screenHeight2 = screenHeight;
     BufferedImage  tempScreen;
     Graphics2D g2;
+    public boolean fullScreenOn = true;
 
 
     //FPS
@@ -47,6 +48,7 @@ public class GamePanel extends JPanel implements  Runnable {
     public AssetSetter aSetter = new AssetSetter(this);
     public UI ui = new UI(this);
     public EventHandler eHandler = new EventHandler(this);
+    Config config = new Config(this);
     Thread gameThread;
 
     // ENTITY AND OBJECT
@@ -66,7 +68,8 @@ public class GamePanel extends JPanel implements  Runnable {
     public final int pauseState = 2;
     public final int dialogState = 3;
     public final int characterState = 4;
-    public final int gameOverState = 5;
+    public final int optionsSate = 5;
+    public final int gameOverState = 6;
 
     public  GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -88,7 +91,10 @@ public class GamePanel extends JPanel implements  Runnable {
         tempScreen = new BufferedImage(screenWidth,screenHeight,BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D)tempScreen.getGraphics();
 
-        setFullScreen();
+        if (fullScreenOn == true) {
+            setFullScreen();
+        }
+
     }
 
     public void setFullScreen(){
@@ -338,13 +344,13 @@ public class GamePanel extends JPanel implements  Runnable {
     }
 
     public void playMusic(int i){
-//        music.setFile(i);
-//        music.play();
-//        music.loop();
+        music.setFile(i);
+        music.play();
+        music.loop();
     }
 
     public void stopMusic(){
-//        music.stop();
+        music.stop();
     }
     public void playSE(int i){
         se.setFile(i);

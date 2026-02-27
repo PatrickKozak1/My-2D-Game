@@ -129,14 +129,6 @@ public class Player extends Entity {
             attacking();
         }
 
-        if (life <= 0) {
-            if (gp.gameState != gp.gameOverState) {
-                gp.gameState = gp.gameOverState;
-                gp.ui.commandNum = 0;
-            }
-            return;
-        }
-
 
         if (moving == false){
             if (keyH.upPressed == true || keyH.downPressed == true
@@ -281,6 +273,9 @@ public class Player extends Entity {
         }
         if (mana > maxMana) {
             mana = maxMana;
+        }
+        if (life <= 0){
+            gp.gameState = gp.gameOverState;
         }
     }
 
