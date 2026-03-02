@@ -178,7 +178,7 @@ public class UI {
         y += gp.tileSize*4;
         g2.drawString(text,x,y);
         if (commandNum == 0) {
-            g2.drawString(">", x,y);
+            g2.drawString(">", x-40,y);
         }
 
         // Back to the title screen
@@ -186,6 +186,9 @@ public class UI {
         x = getXForCenteredText(text);
         y += 55;
         g2.drawString(text,x,y);
+        if (commandNum == 1) {
+            g2.drawString(">", x-40,y);
+        }
 
     }
 

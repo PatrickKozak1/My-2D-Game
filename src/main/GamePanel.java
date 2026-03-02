@@ -97,6 +97,28 @@ public class GamePanel extends JPanel implements  Runnable {
 
     }
 
+    public void retry(){
+
+        player.setDefaultPositions();
+        player.restoreLifeAndMana();
+        aSetter.setNpc();
+        aSetter.setMonster();
+
+    }
+
+    public void restart(){
+
+        player.setDefaultValues();
+        player.setDefaultPositions();
+        player.restoreLifeAndMana();
+        player.setItems();
+        aSetter.setObject();
+        aSetter.setNpc();
+        aSetter.setMonster();
+        aSetter.setInteractiveTile();
+
+    }
+
     public void setFullScreen(){
 
         // GET LOCAL SCREEN DEVICE
@@ -176,16 +198,6 @@ public class GamePanel extends JPanel implements  Runnable {
         }
     }
 
-    // In GamePanel.java
-    public void retry() {
-        player.setDefaultValues(); // Setzt Leben, Position etc. des Spielers zurück
-
-         aSetter.setObject();
-         aSetter.setNpc();
-
-        gameState = playState;
-        ui.commandNum = 0;
-    }
 
 
     public  void update(){

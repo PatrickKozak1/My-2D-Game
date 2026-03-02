@@ -47,9 +47,13 @@ public class KeyHandler implements KeyListener {
         else if (gp.gameState == gp.characterState){
             characterState(code);
         }
-
+        // OPTIONS STATE
         else if (gp.gameState == gp.optionsSate){
             optionsState(code);
+        }
+        // GAME  OVER STATE
+        else if (gp.gameState == gp.gameOverState){
+            gameOverState(code);
         }
 
 
@@ -221,28 +225,30 @@ public class KeyHandler implements KeyListener {
     }
 
     public void gameOverState(int code){
-        if (code == KeyEvent.VK_UP){
-            gp.ui.commandNum--;
-            if (gp.ui.commandNum < 0){
-                gp.ui.commandNum = 1; // 0 = Retry, 1 = Quit
-            }
-        }
-        if (code == KeyEvent.VK_DOWN){
-            gp.ui.commandNum++;
-            if (gp.ui.commandNum > 1){
-                gp.ui.commandNum = 0; // 0 = Retry, 1 = Quit
-            }
-        }
-        if (code == KeyEvent.VK_ENTER){
-            if (gp.ui.commandNum == 0){
-                // Retry
-                gp.retry();
-            }
-            if (gp.ui.commandNum == 1){
-                // Quit
-                System.exit(0);
-            }
-        }
+      if (code == KeyEvent.VK_UP) {
+          gp.ui.commandNum--;
+          if (gp.ui.commandNum <0){
+              gp.ui.commandNum = 1;
+          }
+          gp.playSE(5);
+      }
+      if (code == KeyEvent.VK_DOWN) {
+          gp.ui.commandNum++;
+          if (gp.ui.commandNum > 1){
+               gp.ui.commandNum = 0;
+          }
+          gp.playSE(5);
+      }
+      if (code == KeyEvent.VK_ENTER){
+          if (gp.ui.commandNum == 0){
+              gp.gameState =  gp.playState;
+              gp.retry();
+          } else if (gp.ui.commandNum == 1) {
+              gp.gameState = gp.titleState;
+              gp.restart();
+
+          }
+      }
     }
 
     public void optionsState(int code ){
