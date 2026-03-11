@@ -30,7 +30,7 @@ public class GamePanel extends JPanel implements  Runnable {
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
     public final int maxMap = 10;
-    public int currentMap = 0;
+    public int currentMap = 1;
     // FOR FULL SCREEN
     int screenWidth2 = screenWidth;
     int screenHeight2 = screenHeight;
@@ -72,6 +72,8 @@ public class GamePanel extends JPanel implements  Runnable {
     public final int characterState = 4;
     public final int optionsSate = 5;
     public final int gameOverState = 6;
+    public final int transitionState = 7;
+    public final int tradeState = 8;
 
     public  GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));

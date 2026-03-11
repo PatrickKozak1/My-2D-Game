@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Entity {
 
@@ -60,11 +61,14 @@ public class Entity {
 
 
     // ITEM ATTRIBUTES
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    public final int maxInventorySize = 20;
     public int value;
     public int attackValue;
     public int defenseValue;
     public String description = "";
     public int useCost;
+    public int price;
 
     // TYPE
     public int type; // 0 = player, 1 = npc, 2 = monster
@@ -207,7 +211,7 @@ public class Entity {
         }
 
         spriteCounter++;
-        if (spriteCounter > 12){
+        if (spriteCounter > 24){
             if (spriteNum == 1){
                 spriteNum = 2;
             } else if (spriteNum == 2) {
