@@ -93,6 +93,7 @@ public class Player extends Entity {
         inventory.clear();
         inventory.add(currentWeapon);
         inventory.add(currentShield);
+        inventory.add(new OBJ_Axe(gp));
         inventory.add(new OBJ_Key(gp));
 
     }
@@ -202,6 +203,7 @@ public class Player extends Entity {
             gp.cChecker.checkEntity(this, gp.npc);
             gp.cChecker.checkEntity(this, gp.monster);
             gp.cChecker.checkEntity(this, gp.iTile);
+            gp.cChecker.checkObject(this, false);
 
 
             if (collisionON == false && keyH.enterPressed == false){
@@ -447,8 +449,10 @@ public class Player extends Entity {
             }
             if (selectedItem.type == type_consumable){
 
-               selectedItem.use(this);
-               inventory.remove(itemIndex);
+               if(selectedItem.use(this) == true ) {
+
+                   inventory.remove(itemIndex);
+               }
             }
         }
     }
@@ -458,12 +462,16 @@ public class Player extends Entity {
 
             // PICKUP ONLY ITEMS
             if (gp.obj[gp.currentMap][i].type == type_pickupOnly){
-
                 gp.obj[gp.currentMap][i].use(this);
                 gp.obj[gp.currentMap][i] = null;
-
             }
-
+            // OBSTACLE
+            else if (gp.obj[gp.currentMap][i].type == type_obstacle){
+                if (keyH.enterPressed == true) {
+                    attackCanceled = true;
+                    gp.obj[gp.currentMap][i].interact();
+                }
+            }
             // INVENTORY ITEM
             else {
 

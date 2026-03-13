@@ -20,10 +20,11 @@ public class OBJ_ManaCrystal extends Entity {
 
     }
 
-    public void use (Entity entity){
+    public boolean use (Entity entity){
         gp.playSE(16);
         gp.ui.addMessage("Mana +" + value);
         entity.mana += value;
 
+        return true;
     }
 }

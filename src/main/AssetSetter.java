@@ -57,6 +57,18 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldX = gp.tileSize*22;
         gp.obj[mapNum][i].worldY = gp.tileSize*31;
         i++;
+        gp.obj[mapNum][i] = new OBJ_Door(gp);
+        gp.obj[mapNum][i].worldX = gp.tileSize*10;
+        gp.obj[mapNum][i].worldY = gp.tileSize*12;
+        i++;
+        gp.obj[mapNum][i] = new OBJ_Door(gp);
+        gp.obj[mapNum][i].worldX = gp.tileSize*14;
+        gp.obj[mapNum][i].worldY = gp.tileSize*28;
+        i++;
+        gp.obj[mapNum][i] = new OBJ_Chest(gp,new OBJ_Key(gp));
+        gp.obj[mapNum][i].worldX = gp.tileSize*30;
+        gp.obj[mapNum][i].worldY = gp.tileSize*29;
+        i++;
     }
 
     public void setNpc(){
@@ -127,6 +139,17 @@ public class AssetSetter {
         gp.iTile[mapNum][i] = new IT_DryTree(gp,15,40);i++;
         gp.iTile[mapNum][i] = new IT_DryTree(gp,16,40);i++;
         gp.iTile[mapNum][i] = new IT_DryTree(gp,17,40);i++;
+        gp.iTile[mapNum][i] = new IT_DryTree(gp,30,30);i++;
+        gp.iTile[mapNum][i] = new IT_DryTree(gp,30,31);i++;
+        gp.iTile[mapNum][i] = new IT_DryTree(gp,30,32);i++;
+        gp.iTile[mapNum][i] = new IT_DryTree(gp,29,32);i++;
+        gp.iTile[mapNum][i] = new IT_DryTree(gp,28,32);i++;
+        gp.iTile[mapNum][i] = new IT_DryTree(gp,27,32);i++;
+        gp.iTile[mapNum][i] = new IT_DryTree(gp,27,31);i++;
+        gp.iTile[mapNum][i] = new IT_DryTree(gp,27,30);i++;
+        gp.iTile[mapNum][i] = new IT_DryTree(gp,27,29);i++;
+        gp.iTile[mapNum][i] = new IT_DryTree(gp,26,29);i++;
+        gp.iTile[mapNum][i] = new IT_DryTree(gp,25,29);i++;
 
 
 //        gp.iTile[i] = new IT_DryTree(gp,30,20);i++;
