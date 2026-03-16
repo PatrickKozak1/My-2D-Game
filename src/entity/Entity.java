@@ -34,6 +34,8 @@ public class Entity {
     public boolean onPath = false;
     public boolean knockBack = false;
     public int knockBackPower = 0;
+    public boolean stackable = false;
+    public int amount = 1;
 
     int hpBarCounter = 0;
     int dyingCounter = 0;
