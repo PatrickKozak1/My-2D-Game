@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class TileManager {
 
@@ -18,9 +19,14 @@ public class TileManager {
     public int mapTileNum[][][];
     boolean drawPath = true;
 
+
     public  TileManager(GamePanel gp){
         this.gp = gp;
+
+
         tile = new Tile[50];
+
+
         mapTileNum = new int[gp.maxMap][gp.maxWorldCol][gp.maxWorldRow];
 
 
@@ -30,6 +36,7 @@ public class TileManager {
     }
 
     public  void getTileImage(){
+
 
 
             setup(0, "grass00",false);
@@ -120,7 +127,6 @@ public class TileManager {
 //            setup(35, "water11",true);
 //            setup(36, "water12",true);
 //            setup(37, "water13",true);
-
 
     }
     public void setup(int  index, String imageName,  boolean collision){

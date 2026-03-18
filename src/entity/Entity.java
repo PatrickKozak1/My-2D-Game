@@ -445,13 +445,7 @@ public class Entity {
         return image;
     }
     public void searchPath(int goalCol, int goalRow){
-        System.out.println("searchPath aufgerufen, Ziel: " + goalCol + "/" + goalRow); // DEBUG
 
-        if (gp.pFinder.search() == true) {
-            System.out.println("Pfad gefunden! Länge: " + gp.pFinder.pathList.size()); // DEBUG
-        } else {
-            System.out.println("KEIN Pfad gefunden!"); // DEBUG
-        }
         int startCol = (worldX + solidArea.x)/gp.tileSize;
         int startRow = (worldY + solidArea.y)/gp.tileSize;
 
