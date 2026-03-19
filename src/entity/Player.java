@@ -101,6 +101,8 @@ public class Player extends Entity {
     }
     private int getAttack() {
         attackArea = currentWeapon.attackArea;
+        motion1_duration = currentWeapon.motion1_duration;
+        motion2_duration = currentWeapon.motion2_duration;
         return attack = strength * currentWeapon.attackValue;
     }
 
@@ -316,58 +318,8 @@ public class Player extends Entity {
         }
     }
 
-    public void attacking(){
 
-        spriteCounter++;
-
-        if (spriteCounter <= 5){
-            spriteNum = 1;
-        }
-        if (spriteCounter > 5 && spriteCounter <= 25){
-            spriteNum = 2;
-
-
-            // Save the current worldX, worldY, solidArea
-            int currentWorldX = worldX;
-            int currentWorldY = worldY;
-            int solidAreaWidth = solidArea.width;
-            int solidAreaHeight = solidArea.height;
-
-            // Adjust players worldX/Y for the attackArea
-            switch (direction){
-                case "up": worldY -= attackArea.height; break;
-                case "down": worldY += attackArea.height; break;
-                case "left": worldX -= attackArea.width; break;
-                case "right": worldX += attackArea.width; break;
-            }
-            // attackArea becomes solidArea
-            solidArea.width = attackArea.width;
-            solidArea.height = attackArea.height;
-            // Check monster collision with the updated worldX, worldY and solidArea
-            int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
-            damageMonster(monsterIndex, attack,currentWeapon.knockBackPower);
-
-            int iTileIndex = gp.cChecker.checkEntity(this,gp.iTile);
-            damageInteractiveTile(iTileIndex);
-
-            int projectTileIndex = gp.cChecker.checkEntity(this, gp.projectile);
-            damageProjectTiel(projectTileIndex);
-
-            // After checking collision, resotre the original data
-            worldX = currentWorldX;
-            worldY = currentWorldY;
-            solidArea.width = solidAreaWidth;
-            solidArea.height = solidAreaHeight;
-
-        }
-        if (spriteCounter > 25){
-            spriteNum = 1;
-            spriteCounter = 0;
-            attacking = false;
-        }
-    }
-
-    private void damageProjectTiel(int i) {
+    public void damageProjectTiel(int i) {
 
         if (i != 999){
             Entity projectile = gp.projectile[gp.currentMap][i];
@@ -377,7 +329,7 @@ public class Player extends Entity {
 
     }
 
-    private void damageInteractiveTile(int i) {
+    public void damageInteractiveTile(int i) {
         if (i != 999 && gp.iTile[gp.currentMap][i].destructible == true
                 && gp.iTile[gp.currentMap][i].isCorrectItem(this) == true && gp.iTile[gp.currentMap][i].invincible == false){
             gp.iTile[gp.currentMap][i].playSE();
@@ -394,14 +346,14 @@ public class Player extends Entity {
         }
     }
 
-    public void damageMonster(int i, int attack, int knockBackPower) {
+    public void damageMonster(int i,Entity attacker, int attack, int knockBackPower) {
         if (i != 999){
             if (gp.monster[gp.currentMap][i].invincible == false){
 
                 gp.playSE(12);
 
                 if (knockBackPower > 0) {
-                    knockBack(gp.monster[gp.currentMap][i], knockBackPower);
+                    setKnockBack(gp.monster[gp.currentMap][i],attacker, knockBackPower);
                 }
 
                 int damage = attack - gp.monster[gp.currentMap][i].defense;
@@ -656,13 +608,7 @@ public class Player extends Entity {
 //        g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
     }
 
-    public void knockBack(Entity entity, int knockBackPower) {
 
-        entity.direction = direction;
-        entity.speed += knockBackPower;
-        entity.knockBack = true;
-
-    }
 
 
 }
