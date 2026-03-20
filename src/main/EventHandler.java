@@ -130,10 +130,12 @@ public class EventHandler {
             gp.playSE(16);
             gp.player.attackCanceled = true;
             gp.gameState = gameState;
-            gp.ui.currentDialogue = "You Drink the water.\nYour life and Mana has been recovered.";
+            gp.ui.currentDialogue = "You Drink the water.\nYour life and Mana has been recovered. \n" +
+                    "(The progress has been saved)";
             gp.player.life = gp.player.maxLife;
             gp.player.mana = gp.player.maxMana;
             gp.aSetter.setMonster();
+            gp.saveLoad.save();
         }
 
         gp.keyH.enterPressed = false;

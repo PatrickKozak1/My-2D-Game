@@ -84,6 +84,11 @@ public class Lighting {
 
     }
 
+    public void resetDay(){
+        dayState = day;
+        filterAlpha = 0f;
+    }
+
     public void update(){
 
         if (gp.player.lightUpdated == true) {
@@ -96,7 +101,7 @@ public class Lighting {
 
             dayCounter++;
 
-            if (dayCounter > 600) { // 36000: 10 Minuten
+            if (dayCounter > 18000) { // 36000: 10 Minuten
                 dayState = dusk;
                 dayCounter = 0;
             }
@@ -113,7 +118,7 @@ public class Lighting {
         if (dayState == night) {
             dayCounter++;
 
-            if (dayCounter > 600) { // 36000: 10 Minuten
+            if (dayCounter > 18000) { // 36000: 10 Minuten
                 dayState = dawn;
                 dayCounter = 0;
             }
