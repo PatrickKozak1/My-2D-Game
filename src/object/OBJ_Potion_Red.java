@@ -21,11 +21,16 @@ public class OBJ_Potion_Red extends Entity {
         stackable = true;
     }
 
+    public void setDialogue() {
+
+        dialogues[0][0] ="You drink the " + name + "!\n"
+                + "Your life has been recoverd by " + value + ".";
+
+    }
+
     public boolean use (Entity entity){
 
-        gp.gameState = gp.dialogState;
-        gp.ui.currentDialogue = "You drink the " + name + "!\n"
-                + "Your life has been recoverd by " + value + ".";
+       startDialogue(this,0);
         entity.life += value;
         gp.playSE(16);
         return true;
