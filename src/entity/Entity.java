@@ -91,6 +91,7 @@ public class Entity {
     public int useCost;
     public int price;
     public int lightRadius;
+    public int durability = 100;
 
     // TYPE
     public int type; // 0 = player, 1 = npc, 2 = monster
