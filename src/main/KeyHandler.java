@@ -10,6 +10,8 @@ public class KeyHandler implements KeyListener {
 
     boolean showDebugTex = false;
 
+    public boolean godModeOn = false;
+
     public KeyHandler(GamePanel gp){
         this.gp = gp;
     }
@@ -302,6 +304,13 @@ public class KeyHandler implements KeyListener {
                 case 1:  gp.tileM.loadMap("/maps/indoor01.txt",1); break;
             }
 
+        }
+        if (code == KeyEvent.VK_G){
+            if (godModeOn == false){
+                godModeOn = true;
+            } else if (godModeOn == true) {
+                godModeOn = false;
+            }
         }
     }
 

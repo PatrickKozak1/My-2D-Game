@@ -34,7 +34,7 @@ public class GamePanel extends JPanel implements  Runnable {
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
     public final int maxMap = 10;
-    public int currentMap = 0;
+    public int currentMap = 3;
     // FOR FULL SCREEN
     int screenWidth2 = screenWidth;
     int screenHeight2 = screenHeight;
@@ -124,6 +124,8 @@ public class GamePanel extends JPanel implements  Runnable {
     }
 
     public void resetGame(boolean restart) {
+
+        currentArea = outside;
         player.setDefaultPositions();
         player.restoreStatus();
         player.resetCounter();
@@ -374,7 +376,8 @@ public class GamePanel extends JPanel implements  Runnable {
             g2.drawString("WorldY" + player.worldY, x,y); y += lineHeight;
             g2.drawString("Col" + (player.worldX + player.solidArea.x) / tileSize, x,y); y += lineHeight;
             g2.drawString("Row" + (player.worldY + player.solidArea.y) / tileSize, x,y); y += lineHeight;
-            g2.drawString("Draw Time: " + passed,x,y);
+            g2.drawString("Draw Time: " + passed,x,y);   y += lineHeight;
+            g2.drawString("God Mode:" + keyH.godModeOn,x,y);
 
         }
     }
