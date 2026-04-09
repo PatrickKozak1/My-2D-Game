@@ -109,6 +109,7 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldX = gp.tileSize*18;
         gp.obj[mapNum][i].worldY = gp.tileSize*23;
         i++;
+
     }
 
     public void setNpc(){
