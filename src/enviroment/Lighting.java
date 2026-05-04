@@ -101,7 +101,7 @@ public class Lighting {
 
             dayCounter++;
 
-            if (dayCounter > 600) { // 36000: 10 Min., 18000 5 Min.
+            if (dayCounter > 18000) { // 36000: 10 Min., 18000 5 Min.
                 dayState = dusk;
                 dayCounter = 0;
             }
@@ -118,7 +118,7 @@ public class Lighting {
         if (dayState == night) {
             dayCounter++;
 
-            if (dayCounter > 600) { // 36000: 10 Min., 18000 5 Min.
+            if (dayCounter > 18000) { // 36000: 10 Min., 18000 5 Min.
                 dayState = dawn;
                 dayCounter = 0;
             }

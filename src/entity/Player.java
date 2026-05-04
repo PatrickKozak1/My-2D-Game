@@ -53,7 +53,7 @@ public class Player extends Entity {
         direction = "down";
 
         // PLAYER STATUS
-        level = 0;
+        level = 1;
         maxLife = 6;
         life = maxLife;
         maxMana =  4;
@@ -158,6 +158,7 @@ public class Player extends Entity {
         right1 = setup("/player/boy_right_1",gp.tileSize,gp.tileSize);
         right2 = setup("/player/boy_right_2",gp.tileSize,gp.tileSize);
     }
+
     public void getSleepingImage(BufferedImage image) {
         up1 = image;
         up2 = image;
@@ -199,14 +200,15 @@ public class Player extends Entity {
             attackRight1 = setup("/player/boy_pick_right_1",gp.tileSize*2, gp.tileSize);
             attackRight2 = setup("/player/boy_pick_right_2",gp.tileSize*2, gp.tileSize);
         }
-
     }
+
     public void getGuardImage() {
         guardUp = setup("/player/boy_guard_up", gp.tileSize, gp.tileSize);
         guardDown = setup("/player/boy_guard_down", gp.tileSize, gp.tileSize);
         guardLeft = setup("/player/boy_guard_left", gp.tileSize, gp.tileSize);
         guardRight = setup("/player/boy_guard_right", gp.tileSize, gp.tileSize);
     }
+
     public void update(){
 
         if (knockBack == true) {
@@ -304,7 +306,7 @@ public class Player extends Entity {
             }
         }
 
-        if (moving == true){
+        if (moving == true) {
 
             collisionON = false;
             gp.cChecker.checkTile(this);
@@ -313,63 +315,41 @@ public class Player extends Entity {
             gp.cChecker.checkEntity(this, gp.iTile);
             gp.cChecker.checkObject(this, false);
 
-
-            if (collisionON == false && keyH.enterPressed == false){
-                switch (direction){
-                    case "up":
-                        worldY -= speed;
-                        break;
-                    case "down":
-                        worldY += speed;
-                        break;
-                    case "left":
-                        worldX -= speed;
-                        break;
-                    case "right":
-                        worldX += speed;
-                        break;
+            if (collisionON == false && keyH.enterPressed == false) {
+                switch (direction) {
+                    case "up":    worldY -= speed; break;
+                    case "down":  worldY += speed; break;
+                    case "left":  worldX -= speed; break;
+                    case "right": worldX += speed; break;
                 }
             } else {
-
                 moving = false;
                 pixelCounter = 0;
             }
 
-            spriteCounter++;
-            if (spriteCounter > 12){
-                if (spriteNum == 1){
-                    spriteNum = 2;
-                } else if (spriteNum == 2) {
-                    spriteNum = 1;
+            if (attacking == false) {
+                spriteCounter++;
+                if (spriteCounter > 12) {
+                    spriteNum = (spriteNum == 1) ? 2 : 1;
+                    spriteCounter = 0;
                 }
-                spriteCounter = 0;
-            }
-            else {
-                standCounter++;
-                if (standCounter == 20){
-                    spriteNum = 1;
-                    standCounter = 0;
-                }
-                guardCounter = 0;
             }
 
-            if (collisionON == false){
+            if (collisionON == false) {
                 pixelCounter += speed;
             }
-
-            if (pixelCounter == 48){
+            if (pixelCounter == 48) {
                 moving = false;
                 pixelCounter = 0;
             }
-
         }
 
-        if (keyH.enterPressed == true && attackCanceled == false && guarding == false){
+        if (keyH.enterPressed == true && attackCanceled == false && guarding == false) {
             gp.playSE(22);
             attacking = true;
             spriteCounter = 0;
-
-            // DECREASE DURABILITY
+            moving = false;       // ← Bewegung beim Angriff abbrechen
+            pixelCounter = 0;     // ← Pixel-Counter zurücksetzen
             currentWeapon.durability--;
         }
 

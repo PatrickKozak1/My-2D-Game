@@ -9,16 +9,18 @@ import java.io.IOException;
 public class OBJ_Chest extends Entity {
 
     GamePanel gp;
-
     public static final String objName = "Chest";
+
+    // Liste statt einzelnem loot
+    private java.util.List<Entity> lootList = new java.util.ArrayList<>();
 
     public OBJ_Chest(GamePanel gp) {
         super(gp);
         this.gp = gp;
         type = type_obstacle;
-        name = objName ;
-        image = setup("/objects/chest",gp.tileSize,gp.tileSize);
-        image2 = setup("/objects/chest_opened",gp.tileSize,gp.tileSize);
+        name = objName;
+        image = setup("/objects/chest", gp.tileSize, gp.tileSize);
+        image2 = setup("/objects/chest_opened", gp.tileSize, gp.tileSize);
         down1 = image;
         collision = true;
 
@@ -31,38 +33,42 @@ public class OBJ_Chest extends Entity {
     }
 
     public void setLoot(Entity loot) {
-        this.loot = loot;
-
+        this.lootList.add(loot);  // hinzufügen statt überschreiben
         setDialogue();
     }
 
-    public void setDialogue(){
+    public void setDialogue() {
+        // Namen aller Items zusammenbauen
+        String names = lootList.stream()
+                .map(e -> e.name)
+                .collect(java.util.stream.Collectors.joining(" and "));
 
-        dialogues[0][0] = "You opened the chest and find a " + loot.name + "!\n...But you cannot carry any more!";
-        dialogues[1][0] = "You opened the chest and find a " + loot.name + "!\nYou obtain the " + loot.name + "!";
-
+        dialogues[0][0] = "You opened the chest and find " + names + "!\n...But you cannot carry any more!";
+        dialogues[1][0] = "You opened the chest and find " + names + "!\nYou obtain them!";
     }
 
-    public void interact(){
-
-
-        if (opened == false) {
+    public void interact() {
+        if (!opened) {
             gp.playSE(21);
 
-
-
-            if (gp.player.canObtainItem(loot) == false) {
-                startDialogue(this,0);
+            // erst nur checken ob alle Platz haben
+            boolean canObtainAll = true;
+            for (Entity loot : lootList) {
+                if (!gp.player.canObtainItem(loot)) {
+                    canObtainAll = false;
+                    break;
+                }
             }
-            else {
-                startDialogue(this,1);
+
+            if (!canObtainAll) {
+                startDialogue(this, 0);
+            } else {
+                startDialogue(this, 1);
                 down1 = image2;
                 opened = true;
             }
-        }
-        else {
-            startDialogue(this,2);
+        } else {
+            startDialogue(this, 2);
         }
     }
-
 }

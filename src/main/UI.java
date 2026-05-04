@@ -478,7 +478,6 @@ public class UI {
                 }
                 subState  = 1;
             }
-
         }
 
         // MUSIC
