@@ -44,17 +44,17 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues(){
-//        worldX = gp.tileSize * 26;
-//        worldY = gp.tileSize * 40;
-        worldX = gp.tileSize * 12;
-        worldY = gp.tileSize * 12;
+        worldX = gp.tileSize * 23;
+        worldY = gp.tileSize * 21;
+//        worldX = gp.tileSize * 12;
+//        worldY = gp.tileSize * 12;
         defaultSpeed = 4;
         speed = defaultSpeed;
         direction = "down";
 
         // PLAYER STATUS
-        level = 35;
-        maxLife = 20;
+        level = 0;
+        maxLife = 6;
         life = maxLife;
         maxMana =  4;
         mana = maxMana;
@@ -113,7 +113,6 @@ public class Player extends Entity {
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(new OBJ_Axe(gp));
-        inventory.add(new OBJ_Key(gp));
         inventory.add(new OBJ_Key(gp));
         inventory.add(new OBJ_Lantern(gp));
 
