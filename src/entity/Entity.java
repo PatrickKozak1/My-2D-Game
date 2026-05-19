@@ -254,11 +254,13 @@ public class Entity {
     }
 
     public void startDialogue(Entity entity, int setNum){
-
         gp.gameState = gp.dialogState;
         gp.ui.npc = entity;
         dialogueSet = setNum;
 
+        gp.ui.charIndex = 0;
+        gp.ui.combinedText = "";
+        gp.ui.currentDialogue = "";
     }
 
     public void interact() {}

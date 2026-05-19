@@ -34,8 +34,8 @@ public class UI {
     int subState = 0;
     int counter = 0;
     public Entity npc;
-    int charIndex = 0;
-    String combinedText = "";
+    public int charIndex = 0;
+    public String combinedText = "";
 
 
 

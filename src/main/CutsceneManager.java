@@ -31,10 +31,10 @@ public class CutsceneManager {
                 + "Patrick"
                 + "\n\n\n\n\n\n\n\n\n\n\n\n\n"
                 + "Special Thanks\n"
-                + "Someone\n"
-                + "Someone\n"
-                + "Someone\n"
-                + "Someone\n\n\n\n\n\n"
+                + "Patrick\n"
+                + "Patrick\n"
+                + "Patrick\n"
+                + "Patrick\n\n\n\n\n\n"
                 + "Thank you for playing!";
      }
      public void draw(Graphics2D g2) {
@@ -222,6 +222,20 @@ public class CutsceneManager {
             // Scrolling the credit
             y--;
             drawString(1f, 38f, y, endCredit, 40);
+
+            int lineCount = endCredit.split("\n").length;
+            int totalHeight = lineCount * 40; // 40 = lineHeight
+
+            if (y + totalHeight < 0) {
+                // Zurück zum Hauptmenü
+                sceneNum = NA;
+                scenePhase = 0;
+                counter = 0;
+                y = 0;
+                alpha = 0f;
+                gp.resetGame(true);
+                gp.gameState = gp.titleState;
+            }
 
         }
     }
