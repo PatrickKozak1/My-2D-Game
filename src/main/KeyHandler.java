@@ -65,7 +65,21 @@ public class KeyHandler implements KeyListener {
             mapState(code);
         }
 
+        else if (gp.gameState == gp.tutorialState) {
+            tutorialState(code);
+        }
 
+
+    }
+
+    public void tutorialState(int code) {
+        if (code == KeyEvent.VK_ENTER) {
+            if (gp.tManager.itemTutorialActive) {
+                gp.tManager.dismissItemTutorial();
+            } else {
+                gp.tManager.nextMainPhase();
+            }
+        }
     }
 
     private void mapState(int code) {
@@ -187,8 +201,9 @@ public class KeyHandler implements KeyListener {
                 }
             }
             if (code == KeyEvent.VK_ENTER){
-                if (gp.ui.commandNum == 0){
-                    gp.gameState = gp.playState;
+                if (gp.ui.commandNum == 0) {
+                    gp.gameState = gp.tutorialState; // war: gp.playState
+                    gp.tManager.startTutorial();
                     gp.playMusic(1);
                 }
                 if (gp.ui.commandNum == 1){
@@ -262,6 +277,7 @@ public class KeyHandler implements KeyListener {
 
         if (code == KeyEvent.VK_C){
             gp.gameState = gp.characterState;
+            gp.tManager.triggerInventoryTutorial();
         }
 
         if (code == KeyEvent.VK_ENTER){
@@ -332,6 +348,13 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_ENTER){
             gp.player.selectItem();
+        }
+
+        if (gp.tManager.inventoryTutorialActive) {
+            if (code == KeyEvent.VK_ENTER) {
+                gp.tManager.nextInvPhase();
+            }
+            return;
         }
 
         playerInventory(code);

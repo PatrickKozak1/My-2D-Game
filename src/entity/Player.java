@@ -566,6 +566,7 @@ public class Player extends Entity {
             else { // New item so need to check vacancy
                 if (inventory.size() != maxInventorySize){
                     inventory.add(newItem);
+                    gp.tManager.triggerItemTutorial(item);
                     canObtain = true;
                 }
             }
@@ -573,6 +574,7 @@ public class Player extends Entity {
         else { // NOT STACKABLE so check vacancy
             if (inventory.size() != maxInventorySize){
                 inventory.add(newItem);
+                gp.tManager.triggerItemTutorial(item);
                 canObtain = true;
             }
         }

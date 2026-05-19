@@ -41,7 +41,9 @@ public class GamePanel extends JPanel implements  Runnable {
     BufferedImage  tempScreen;
     Graphics2D g2;
     public boolean fullScreenOn = true;
-
+    // Tutorial
+    public final int tutorialState = 12;
+    public TutorialManager tManager = new TutorialManager(this);
 
     //FPS
     int FPS = 60;
@@ -373,6 +375,11 @@ public class GamePanel extends JPanel implements  Runnable {
 
             // UI
             ui.draw(g2);
+
+            // TUTORIAL OVERLAY (immer ganz oben)
+            if (gameState == tutorialState) {
+                tManager.draw(g2);
+            }
         }
 
 

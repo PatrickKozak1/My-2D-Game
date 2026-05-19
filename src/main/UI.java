@@ -126,7 +126,7 @@ public class UI {
         }
 
         // PLAY STATE
-        if (gp.gameState == gp.playState){
+        if (gp.gameState == gp.playState || gp.gameState == gp.tutorialState){
             drawPlayerLife();
             drawMonsterLife();
             drawMessage();
@@ -145,7 +145,10 @@ public class UI {
         // CHARACTER STATE
         if (gp.gameState == gp.characterState) {
             drawCharacterScreen();
-            drawInventory(gp.player,true);
+            drawInventory(gp.player, true);
+            if (gp.tManager.inventoryTutorialActive) {
+                gp.tManager.drawInventoryOverlay(g2);
+            }
         }
 
         // OPTION STATE
