@@ -215,6 +215,17 @@ public class TutorialManager {
         gp.gameState = gp.playState;
     }
 
+    // Skip Tutorials
+   public void skippAll(){
+        phase = 0;
+        inventoryTutorialActive = false;
+        inventoryTutorialShown = true;
+        invPhase = 0;
+        itemTutorialActive = false;
+        tutorialItem = null;
+        fadeAlpha = 0f;
+        gp.gameState = gp.playState;
+   }
 
     public void draw(Graphics2D g2) {
         this.g2 = g2;

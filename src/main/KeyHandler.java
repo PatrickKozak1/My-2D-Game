@@ -80,6 +80,9 @@ public class KeyHandler implements KeyListener {
                 gp.tManager.nextMainPhase();
             }
         }
+        if (code == KeyEvent.VK_ESCAPE){
+            gp.tManager.skippAll();
+        }
     }
 
     private void mapState(int code) {
@@ -353,6 +356,9 @@ public class KeyHandler implements KeyListener {
         if (gp.tManager.inventoryTutorialActive) {
             if (code == KeyEvent.VK_ENTER) {
                 gp.tManager.nextInvPhase();
+            }
+            if (code == KeyEvent.VK_ESCAPE){
+                gp.tManager.skippAll();
             }
             return;
         }
