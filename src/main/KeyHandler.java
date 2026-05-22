@@ -68,8 +68,6 @@ public class KeyHandler implements KeyListener {
         else if (gp.gameState == gp.tutorialState) {
             tutorialState(code);
         }
-
-
     }
 
     public void tutorialState(int code) {
@@ -434,8 +432,6 @@ public class KeyHandler implements KeyListener {
                     gp.playSE(5);
                 }
             }
-
-
         }
         if (code == KeyEvent.VK_RIGHT){
             if (gp.ui.subState == 0){

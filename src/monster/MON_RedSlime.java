@@ -3,10 +3,7 @@ package monster;
 import entity.Entity;
 import entity.Projectile;
 import main.GamePanel;
-import object.OBJ_Coin_Bronze;
-import object.OBJ_Heart;
-import object.OBJ_ManaCrystal;
-import object.OBJ_Rock;
+import object.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;import java.util.Random;
@@ -24,7 +21,7 @@ public class MON_RedSlime extends Entity {
         this.gp = gp;
 
         type = type_monster;
-        name = "Green Slime";
+        name = "Red Slime";
         defaultSpeed = 2;
         speed = defaultSpeed;
         maxLife = 10;
@@ -32,7 +29,7 @@ public class MON_RedSlime extends Entity {
         attack = 7;
         defense = 0;
         exp = 5;
-        projectile = new OBJ_Rock(gp);
+        projectile = new OBJ_Fireball(gp);
 
         solidArea.x = 3;
         solidArea.y = 18;
@@ -89,32 +86,38 @@ public class MON_RedSlime extends Entity {
 
         if (onPath == true) {
 
-            if (titleDistance > 20){
+            if (titleDistance > 20) {
                 onPath = false;
             }
 
-            int goalCol = (gp.player.worldX + gp.player.solidArea.x)/gp.tileSize;
-            int goalRow = (gp.player.worldY + gp.player.solidArea.y)/gp.tileSize;
+            int goalCol = (gp.player.worldX + gp.player.solidArea.x) / gp.tileSize;
+            int goalRow = (gp.player.worldY + gp.player.solidArea.y) / gp.tileSize;
+            searchPath(goalCol, goalRow);
 
-            searchPath(goalCol,goalRow);
+            int i = new Random().nextInt(100) + 1;
+            if (i > 99 && projectile.alive == false && shotAvailableCounter == 30) {
 
-            int i = new Random().nextInt(100)+1;
-//            if (i > 99 && projectile.alive == false && shotAvailableCounter == 30){
-//
-//                projectile.set(worldX,worldY,direction,true,this);
-////                gp.projectileList.add(projectile);
-//
-//                // CHECK VACANCY
-//                for (int ii = 0; ii < gp.projectile[1].length; ii++) {
-//                    if (gp.projectile[gp.currentMap][ii] == null) {
-//                        gp.projectile[gp.currentMap][ii] = projectile;
-//                        break;
-//                    }
-//                }
-//
-//                shotAvailableCounter = 0;
-//            }
 
+                int xDist = gp.player.worldX - worldX;
+                int yDist = gp.player.worldY - worldY;
+                String shootDirection;
+
+                if (Math.abs(xDist) > Math.abs(yDist)) {
+                    shootDirection = (xDist > 0) ? "right" : "left";
+                } else {
+                    shootDirection = (yDist > 0) ? "down" : "up";
+                }
+
+                projectile.set(worldX, worldY, shootDirection, true, this); // ← shootDirection statt direction
+
+                for (int ii = 0; ii < gp.projectile[1].length; ii++) {
+                    if (gp.projectile[gp.currentMap][ii] == null) {
+                        gp.projectile[gp.currentMap][ii] = projectile;
+                        break;
+                    }
+                }
+                shotAvailableCounter = 0;
+            }
         }
         else{
 
