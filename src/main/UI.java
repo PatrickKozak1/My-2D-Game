@@ -6,6 +6,7 @@ import object.OBJ_Heart;
 import object.OBJ_ManaCrystal;
 
 
+import javax.naming.NamingEnumeration;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class UI {
     public int playerSlotRow = 0;
     public int npcSlotCol = 0;
     public int npcSlotRow = 0;
-    int subState = 0;
+    public int subState = 0;
     int counter = 0;
     public Entity npc;
     public int charIndex = 0;
@@ -206,55 +207,199 @@ public class UI {
             case 0: trade_select();break;
             case 1: trade_buy();break;
             case 2: trade_sell();break;
+            case 3: trade_upgrade();break;
         }
         gp.keyH.enterPressed = false;
     }
 
-    public void trade_select(){
 
+    private void trade_upgrade() {
+        drawInventory(gp.player,true);
+
+        // Hint-Fenster
+        int x = gp.tileSize*2;
+        int y = gp.tileSize*9;
+        int width = gp.tileSize*6;
+        int height = gp.tileSize*2;
+        drawSubWindow(x,y,width,height);
+        g2.drawString(" [ESC] BACK  [ENTER] UPGRADE", x + 16, y + 60);
+
+        // Coin-Fenster
+        x = gp.tileSize *12;
+        y = gp.tileSize * 9;
+        drawSubWindow(x,y,width,height);
+        g2.drawString("Your Coins: " + gp.player.coin, x + 24, y + 60);
+
+        // Info-Fenster für das skallierte Item
+        int itemIndex = getItemIndexOnSlot(playerSlotCol, playerSlotRow);
+        if (itemIndex < gp.player.inventory.size()){
+            Entity item = gp.player.inventory.get(itemIndex);
+
+            int infoX = gp.tileSize * 2;
+            int infoY = gp.tileSize;
+            int infoW = gp.tileSize * 8;
+            int infoH = gp.tileSize * 7;
+            drawSubWindow(infoX,infoY,infoW,infoH);
+
+            if (isUpgradable(item)){
+                // Name
+                g2.setFont(g2.getFont().deriveFont(Font.BOLD,32f));
+                g2.setColor(Color.white);
+                g2.drawString(item.name,infoX + 20, infoY + 44);
+
+                // Sterne
+                g2.setFont(g2.getFont().deriveFont(Font.PLAIN,26f));
+                g2.setColor(new Color(255,215,0));
+                g2.drawString("Level: " + buildStarString(item), infoX + 20, infoY + 84);
+
+                // Aktueller Stat
+                g2.setFont(g2.getFont().deriveFont(Font.PLAIN,22f));
+                g2.setColor(new Color(180,180,180));
+
+                if (item.type == item.type_sword || item.type == item.type_axe || item.type == item.type_pickaxe) {
+                    g2.drawString("Attack: " + item.attackValue, infoX + 20, infoY + 120);
+                    if (item.upgradeLevel < item.maxUpgradeLevel) {
+                        g2.setColor(new Color(100,220,100));
+                        g2.drawString("Attack: " + (item.attackValue + 1), infoX + 20, infoY + 155);
+                    }
+                    if (item.type == item.type_shield) {
+                        g2.drawString("Defense: " + item.defenseValue, infoX + 20, infoY + 120);
+                        if (item.upgradeLevel < item.maxUpgradeLevel) {
+                            g2.setColor(new Color(100, 220, 100));
+                            g2.drawString("After:   " + (item.defenseValue + 1), infoX + 20, infoY + 155);
+                        }
+                    }
+
+                    // Kosten oder MAX
+                    if (item.upgradeLevel >= item.maxUpgradeLevel){
+                        g2.setFont(g2.getFont().deriveFont(Font.BOLD,22f));
+                        g2.setColor(new Color(255,215,0));
+                        g2.drawString("MAX", infoX + 20, infoY + 200);
+                    }else {
+                        int cost = getUpgradeCost(item);
+                        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 22f));
+                        g2.setColor(gp.player.coin >= cost
+                                ? new Color(100, 220, 100)
+                                : new Color(220, 80, 80));
+                        g2.drawString("Cost: " + cost + "Coins", infoX + 20, infoY + 200);
+                    }
+                }else {
+                    g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 22f));
+                    g2.setColor(new Color(150,150,150));
+                    g2.drawString(item.name,infoX + 20, infoY + 44);
+                    g2.drawString("Cannot be upgraded", infoX + 20, infoY + 84);
+                }
+            }
+        }
+
+    }
+
+    void tryUpgrade() {
+        int itemIndex = getItemIndexOnSlot(playerSlotCol, playerSlotRow);
+        if (itemIndex >= gp.player.inventory.size()) return;
+
+        Entity item = gp.player.inventory.get(itemIndex);
+
+        if (!isUpgradable(item)) {
+            addMessage("This item cannot be upgraded.");
+            return;
+        }
+        if (item.upgradeLevel >= item.maxUpgradeLevel) {
+            addMessage("This item is already at max level.");
+            return;
+        }
+        int cost = getUpgradeCost(item);
+        if (gp.player.coin < cost){
+            addMessage("You don't have enough coins.");
+            return;
+        }
+
+        gp.player.coin -= cost;
+        item.upgradeLevel++;
+
+        if (item.type == item.type_sword || item.type == item.type_axe || item.type == item.type_pickaxe) {
+            item.attackValue++;
+            if (item == gp.player.currentWeapon){
+                gp.player.attack = gp.player.getAttack();
+            }
+        }
+        if (item.type == item.type_shield){
+            item.defenseValue++;
+            if (item == gp.player.currentShield){
+                gp.player.defense = gp.player.getDefense();
+            }
+        }
+
+        gp.playSE(13);
+        addMessage(item.name + " upgrade to Lv. " + item.upgradeLevel + "!");
+    }
+
+    private boolean isUpgradable(Entity item){
+        return item.type == item.type_sword
+                || item.type == item.type_axe
+                || item.type == item.type_pickaxe
+                || item.type == item.type_shield;
+    }
+
+    private int getUpgradeCost(Entity item){
+        return item.price * (item.upgradeLevel +1);
+    }
+
+    private String buildStarString(Entity item){
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < item.upgradeLevel; i++) {
+            sb.append("*");
+        }
+        return sb.toString();
+    }
+
+    public void trade_select() {
         npc.dialogueSet = 0;
         drawDialogueScreen();
 
-        // DRAW WINDOW
         int x = gp.tileSize * 15;
-        int y = gp.tileSize *4;
-        int width = gp.tileSize *3;
-        int height = (int) (gp.tileSize * 3.5);
-        drawSubWindow(x,y,width,height);
+        int y = gp.tileSize * 4;
+        int width  = gp.tileSize * 3;
+        int height = (int)(gp.tileSize * 5.5);
+        drawSubWindow(x, y, width, height);
 
-        // DRAW TEXT
         x += gp.tileSize;
         y += gp.tileSize;
-        g2.drawString("Buy",x,y);
-        if (commandNum == 0){
-            g2.drawString(">",x-24,y);
-            if (gp.keyH.enterPressed == true){
-                subState = 1;
 
-            }
+        // Buy – commandNum 0
+        g2.drawString("Buy", x, y);
+        if (commandNum == 0) {
+            g2.drawString(">", x - 24, y);
+            if (gp.keyH.enterPressed) subState = 1;
         }
         y += gp.tileSize;
 
-        g2.drawString("Sell",x,y);
-        if (commandNum == 1){
-            g2.drawString(">",x-24,y);
-            if (gp.keyH.enterPressed == true){
-                subState = 2;
-
-            }
+        // Sell – commandNum 1
+        g2.drawString("Sell", x, y);
+        if (commandNum == 1) {
+            g2.drawString(">", x - 24, y);
+            if (gp.keyH.enterPressed) subState = 2;
         }
         y += gp.tileSize;
 
-        g2.drawString("Leave",x,y);
-        if (commandNum == 2){
-            g2.drawString(">",x-24,y);
-            if (gp.keyH.enterPressed == true){
+        // Upgrade – commandNum 2
+        g2.drawString("Upgrade", x, y);
+        if (commandNum == 2) {
+            g2.drawString(">", x - 24, y);
+            if (gp.keyH.enterPressed) subState = 3;
+        }
+        y += gp.tileSize;
+
+        // Leave – commandNum 3 (NUR hier, nirgendwo sonst!)
+        g2.drawString("Leave", x, y);
+        if (commandNum == 3) {
+            g2.drawString(">", x - 24, y);
+            if (gp.keyH.enterPressed) {
                 commandNum = 0;
-                npc.startDialogue(npc,1);
+                subState = 0;
+                npc.startDialogue(npc, 1);
             }
         }
-
-
     }
 
     public void trade_buy(){

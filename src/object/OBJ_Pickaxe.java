@@ -22,5 +22,6 @@ public class OBJ_Pickaxe extends Entity {
         knockBackPower = 10;
         motion1_duration = 10;
         motion2_duration = 20;
+        maxUpgradeLevel = 4;
     }
 }

@@ -98,16 +98,12 @@ public class KeyHandler implements KeyListener {
         if (gp.ui.subState == 0){
             if (code == KeyEvent.VK_UP){
                 gp.ui.commandNum--;
-                if (gp.ui.commandNum < 0){
-                    gp.ui.commandNum = 2;
-                }
+                if (gp.ui.commandNum < 0) gp.ui.commandNum = 3;
                 gp.playSE(5);
             }
             if (code == KeyEvent.VK_DOWN){
                 gp.ui.commandNum++;
-                if (gp.ui.commandNum > 2){
-                    gp.ui.commandNum = 0;
-                }
+                if (gp.ui.commandNum > 3) gp.ui.commandNum = 0;
                 gp.playSE(5);
             }
         }
@@ -123,6 +119,14 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_ESCAPE){
                 gp.ui.subState = 0;
             }
+        }
+
+        if (gp.ui.subState == 3){
+            playerInventory(code);
+            if (code == KeyEvent.VK_ESCAPE) gp.ui.subState = 0;
+            if (code == KeyEvent.VK_ENTER) gp.ui.tryUpgrade();
+
+
         }
     }
 

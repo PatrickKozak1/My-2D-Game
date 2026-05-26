@@ -99,6 +99,8 @@ public class Entity {
     public int price;
     public int lightRadius;
     public int durability = 100;
+    public int upgradeLevel = 0;
+    public int maxUpgradeLevel = 5;
 
     // TYPE
     public int type; // 0 = player, 1 = npc, 2 = monster
