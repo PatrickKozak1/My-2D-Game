@@ -68,6 +68,45 @@ public class KeyHandler implements KeyListener {
         else if (gp.gameState == gp.tutorialState) {
             tutorialState(code);
         }
+
+        else if (gp.gameState == gp.loreState) {
+            loreState(code);
+        }
+    }
+
+    public void loreState(int code) {
+        if (gp.loreManager.journalOpen) {
+            // Journal Navigation
+            if (code == KeyEvent.VK_UP) {
+                gp.loreManager.journalIndex--;
+                if (gp.loreManager.journalIndex < 0)
+                    gp.loreManager.journalIndex = gp.loreManager.collectedNotes.size() - 1;
+                gp.playSE(5);
+            }
+            if (code == KeyEvent.VK_DOWN) {
+                gp.loreManager.journalIndex++;
+                if (gp.loreManager.journalIndex >= gp.loreManager.collectedNotes.size())
+                    gp.loreManager.journalIndex = 0;
+                gp.playSE(5);
+            }
+            if (code == KeyEvent.VK_ENTER) {
+                gp.loreManager.openSelectedJournalNote();
+            }
+            if (code == KeyEvent.VK_ESCAPE) {
+                gp.loreManager.closeReading();
+            }
+        } else {
+            // Notiz lesen
+            if (code == KeyEvent.VK_ENTER) {
+                gp.loreManager.nextPage();
+            }
+            if (code == KeyEvent.VK_BACK_SPACE) {
+                gp.loreManager.prevPage();
+            }
+            if (code == KeyEvent.VK_ESCAPE) {
+                gp.loreManager.closeReading();
+            }
+        }
     }
 
     public void tutorialState(int code) {
@@ -125,8 +164,6 @@ public class KeyHandler implements KeyListener {
             playerInventory(code);
             if (code == KeyEvent.VK_ESCAPE) gp.ui.subState = 0;
             if (code == KeyEvent.VK_ENTER) gp.ui.tryUpgrade();
-
-
         }
     }
 
@@ -224,7 +261,7 @@ public class KeyHandler implements KeyListener {
                     System.exit(0);
                 }
             }
-        }      else if (gp.ui.titleScreenState == 1) {
+        } else if (gp.ui.titleScreenState == 1) {
             if (code == KeyEvent.VK_UP){
                 gp.ui.commandNum--;
                 if (gp.ui.commandNum < 0){
@@ -297,6 +334,9 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_M){
             gp.gameState = gp.mapState;
+        }
+        if (code == KeyEvent.VK_F5) { // ← F5 zum Durchschalten
+            gp.weatherManager.cycleWeather();
         }
 
         if (code == KeyEvent.VK_X){
@@ -424,6 +464,7 @@ public class KeyHandler implements KeyListener {
                 gp.ui.commandNum = 0;
             }
         }
+
         if (code == KeyEvent.VK_LEFT){
             if (gp.ui.subState == 0){
                 if (gp.ui.commandNum == 1 && gp.music.volumeScale > 0){
@@ -437,6 +478,7 @@ public class KeyHandler implements KeyListener {
                 }
             }
         }
+
         if (code == KeyEvent.VK_RIGHT){
             if (gp.ui.subState == 0){
                 if (gp.ui.commandNum == 1 && gp.music.volumeScale < 5){

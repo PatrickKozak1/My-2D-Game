@@ -259,7 +259,7 @@ public class Entity {
         gp.gameState = gp.dialogState;
         gp.ui.npc = entity;
         dialogueSet = setNum;
-
+        entity.dialogueIndex = 0;
         gp.ui.charIndex = 0;
         gp.ui.combinedText = "";
         gp.ui.currentDialogue = "";

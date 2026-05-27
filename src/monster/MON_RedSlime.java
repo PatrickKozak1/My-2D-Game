@@ -158,6 +158,8 @@ public class MON_RedSlime extends Entity {
     }
     public void checkDrop(){
 
+        gp.questManager.notifyKill(name);
+
         // CAST A DIE
         int i = new Random().nextInt(100)+1;
 

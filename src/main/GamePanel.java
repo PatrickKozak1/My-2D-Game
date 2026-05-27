@@ -44,6 +44,9 @@ public class GamePanel extends JPanel implements  Runnable {
     // Tutorial
     public final int tutorialState = 12;
     public TutorialManager tManager = new TutorialManager(this);
+    public QuestManager questManager = new QuestManager(this);
+    public WeatherManager weatherManager = new WeatherManager(this);
+    public LoreManager loreManager = new LoreManager(this);
 
     //FPS
     int FPS = 60;
@@ -91,6 +94,7 @@ public class GamePanel extends JPanel implements  Runnable {
     public final int mapState = 10;
     public final int cutsceneState = 11;
     public final int upgradeState = 12;
+    public final int loreState = 13;
 
     // OTHERS
     public boolean bossBattleOn = false;
@@ -284,6 +288,8 @@ public class GamePanel extends JPanel implements  Runnable {
                 }
             }
             eManager.update();
+            weatherManager.update();
+            System.out.println("Weather: " + weatherManager.currentWeather); // ← temp
         }
         if (gameState == pauseState){
             // nothing
@@ -297,6 +303,11 @@ public class GamePanel extends JPanel implements  Runnable {
         long drawStart = 0;
         if (keyH.showDebugTex == true){
             drawStart = System.nanoTime();
+        }
+
+        // LORE OVERLAY
+        if (gameState == loreState) {
+            loreManager.draw(g2);
         }
 
         // Title SCREEN
@@ -367,6 +378,8 @@ public class GamePanel extends JPanel implements  Runnable {
 
             // ENVIRONMENT
             eManager.draw(g2);
+
+            weatherManager.draw(g2);
 
             // MINI MAP
             map.drawMiniMap(g2);

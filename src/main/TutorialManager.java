@@ -318,7 +318,13 @@ public class TutorialManager {
     }
 
     private void drawItemTutorial() {
-        if (tutorialItem == null) return;
+        // Lokale Kopie – verhindert dass tutorialItem zwischen den Aufrufen null wird
+        Entity item = tutorialItem;
+        if (item == null) {
+            itemTutorialActive = false;
+            gp.gameState = gp.playState;
+            return;
+        }
 
         // Dunkler Hintergrund
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, fadeAlpha * 0.85f));
@@ -328,37 +334,41 @@ public class TutorialManager {
         // Card-Fenster
         int cardW = gp.tileSize * 9;
         int cardH = gp.tileSize * 7;
-        int cardX = gp.screenWidth / 2 - cardW / 2;
+        int cardX = gp.screenWidth  / 2 - cardW / 2;
         int cardY = gp.screenHeight / 2 - cardH / 2;
 
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, fadeAlpha));
         gp.ui.drawSubWindow(cardX, cardY, cardW, cardH);
 
-        String typeName = getTypeName(tutorialItem);
+        // Typ-Badge
+        String typeName = getTypeName(item);
         g2.setFont(gp.ui.purisaB.deriveFont(Font.BOLD, 16f));
         g2.setColor(new Color(255, 215, 0));
         int tnW = g2.getFontMetrics().stringWidth(typeName);
         g2.drawString(typeName, cardX + cardW / 2 - tnW / 2, cardY + 28);
 
+        // Trennlinie
         g2.setColor(new Color(255, 215, 0, 100));
         g2.setStroke(new BasicStroke(1f));
         g2.drawLine(cardX + 20, cardY + 36, cardX + cardW - 20, cardY + 36);
 
-
-        if (tutorialItem.down1 != null) {
+        // Item-Bild
+        if (item.down1 != null) {
             int imgSize = gp.tileSize + 16;
             int imgX = cardX + cardW / 2 - imgSize / 2;
-            g2.drawImage(tutorialItem.down1, imgX, cardY + 44, imgSize, imgSize, null);
+            g2.drawImage(item.down1, imgX, cardY + 44, imgSize, imgSize, null);
         }
 
+        // Item-Name
         int nameY = cardY + 44 + gp.tileSize + 28;
         g2.setFont(gp.ui.purisaB.deriveFont(Font.BOLD, 30f));
         g2.setColor(Color.white);
-        int nW = g2.getFontMetrics().stringWidth(tutorialItem.name);
-        g2.drawString(tutorialItem.name, cardX + cardW / 2 - nW / 2, nameY);
+        int nW = g2.getFontMetrics().stringWidth(item.name);
+        g2.drawString(item.name, cardX + cardW / 2 - nW / 2, nameY);
 
-        String desc = (tutorialItem.description != null && !tutorialItem.description.isEmpty())
-                ? tutorialItem.description : "A mysterious item.";
+
+        String desc = (item.description != null && !item.description.isEmpty())
+                ? item.description : "A mysterious item.";
         g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 20f));
         g2.setColor(new Color(190, 190, 190));
         int descY = nameY + 34;
@@ -368,7 +378,7 @@ public class TutorialManager {
             descY += 28;
         }
 
-        String hint = getItemHint(tutorialItem);
+        String hint = getItemHint(item);
         int hintBoxY = cardY + cardH - gp.tileSize - 14;
         g2.setColor(new Color(255, 215, 0, 40));
         g2.fillRoundRect(cardX + 16, hintBoxY - 22, cardW - 32, 32, 8, 8);
@@ -377,12 +387,13 @@ public class TutorialManager {
         int hW = g2.getFontMetrics().stringWidth(hint);
         g2.drawString(hint, cardX + cardW / 2 - hW / 2, hintBoxY);
 
-        // Continue
+
         g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 17f));
         g2.setColor(new Color(110, 110, 110));
-        String cont = "[ ENTER ]  Continue";
-        int cW = g2.getFontMetrics().stringWidth(cont);
-        g2.drawString(cont, cardX + cardW / 2 - cW / 2, cardY + cardH - 14);
+        g2.drawString("[ ENTER ]  Got it", cardX + 20, cardY + cardH - 14);
+        String skipText = "[ ESC ]  Skip";
+        int skW = g2.getFontMetrics().stringWidth(skipText);
+        g2.drawString(skipText, cardX + cardW - skW - 20, cardY + cardH - 14);
 
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }

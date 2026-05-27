@@ -131,6 +131,7 @@ public class UI {
             drawPlayerLife();
             drawMonsterLife();
             drawMessage();
+            gp.questManager.draw(g2);
         }
         // PAUSE STATE
         if (gp.gameState == gp.pauseState){

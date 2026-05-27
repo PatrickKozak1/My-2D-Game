@@ -1,12 +1,15 @@
 package entity;
 
 import main.GamePanel;
+import main.Quest;
 
 import java.awt.*;
 import java.util.Random;
 
 
 public class NPC_OldMan extends Entity{
+
+    private boolean introShown = false;
 
     public NPC_OldMan(GamePanel gp) {
         super(gp);
@@ -50,6 +53,20 @@ public class NPC_OldMan extends Entity{
         dialogues[1][2] = "In any case, don't push yourself too hard.";
 
         dialogues[2][0] = "I wonder how to open that door...";
+
+        dialogues[3][0] = "Those Red Slimes have been causing\ntrouble around here lately...";
+        dialogues[3][1] = "Would you help an old man out?\nDefeat 5 Red Slimes for me!";
+        dialogues[3][2] = "I'll reward you handsomely, I promise!";
+
+        dialogues[4][0] = "Those slimes are still out there...";
+        dialogues[4][1] = "Comme back when you've defeated \n5 Red Slimes!";
+
+        dialogues[5][0] = "You did it! The slimes are gone!";
+        dialogues[5][1] = "Here, take this as your reward.\nYou've earned it, lad!";
+
+        dialogues[6][0] = "Thank you again for your help.";
+        dialogues[6][1] = "You truly are a brave adventurer!";
+
     }
 
     public void setAction(){
@@ -88,24 +105,24 @@ public class NPC_OldMan extends Entity{
     }
     public void speak(){
 
-        // Do this charakter specific stuff
-
         facePlayer();
-        startDialogue(this,dialogueSet);
+        Quest q = gp.questManager.getQuest("slime_hunter");
 
-        dialogueSet++;
+        if (q.rewarded){
+            startDialogue(this,6);
 
-        if (dialogues[dialogueSet][0] == null) {
-
-            dialogueSet--;
+        }else if (q.completed) {
+            startDialogue(this,5);
+            gp.questManager.rewardQuest(q);
+        }else if (q.accepted) {
+            startDialogue(this,4);
+        }else if (introShown) {
+            startDialogue(this,3);
+            gp.questManager.acceptQuest("slime_hunter");
+        }else {
+            introShown = true;
+            startDialogue(this,0);
         }
-
-//        if (gp.player.life < gp.player.maxLife/3){
-//            dialogueSet = 1;
-//        }
-
-//        onPath = true;
-        System.out.println("onPath gesetzt auf: " + onPath);
     }
 
 }
