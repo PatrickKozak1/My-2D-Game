@@ -90,8 +90,14 @@ public class LoreManager {
     }
 
     public void openNote(String id){
+        System.out.println("openNote called: " + id); // ← temp debug
+        System.out.println("gameState wird gesetzt auf: " + gp.loreState); // ← temp debug
+
         LoreNote note = getNote(id);
-        if (note == null)return;
+        if (note == null) {
+            System.out.println("NOTE IST NULL - id nicht gefunden!"); // ← temp debug
+            return;
+        }
 
         if (!note.collected){
             note.collected = true;
@@ -128,71 +134,80 @@ public class LoreManager {
     }
 
     void closeReading() {
+        gp.gameState = gp.playState;
         reading = false;
         journalOpen = false;
         currentNote = null;
         currentPage = 0;
-        gp.gameState = gp.playState;
+        currentNote = null;
     }
 
-    public void draw(Graphics2D g2){
-        g2.setColor(new Color(0,0,0,180));
-        g2.fillRect(0,0,gp.screenWidth,gp.screenHeight);
+    public void draw(Graphics2D g2) {
+        // Lokale Kopie – Thread-sicher ← NEU
+        LoreNote note = currentNote;
 
-        if (journalOpen && !reading){
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        g2.setColor(new Color(0, 0, 0, 180));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+        if (journalOpen && !reading) {
             drawJournal(g2);
-        }else if (reading && currentNote != null){
-            drawReadingScreen(g2);
+        } else if (reading && note != null) {
+            drawReadingScreen(g2, note); // ← note mitgeben
         }
     }
 
-    private void drawReadingScreen(Graphics2D g2) {
+    // note als Parameter statt this.currentNote ← NEU
+    private void drawReadingScreen(Graphics2D g2, LoreNote note) {
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
         int pW = gp.tileSize * 11;
         int pH = gp.tileSize * 9;
-        int pX = gp.screenWidth / 2 - pW / 2;
+        int pX = gp.screenWidth  / 2 - pW / 2;
         int pY = gp.screenHeight / 2 - pH / 2;
 
-        drawParchment(g2,pX,pY,pW,pH);
+        drawParchment(g2, pX, pY, pW, pH);
 
-        g2.setColor(new Color(139,90,43));
+        g2.setColor(new Color(139, 90, 43));
         g2.setStroke(new BasicStroke(3));
         g2.drawLine(pX + 24, pY + 48, pX + pW - 24, pY + 48);
         g2.drawLine(pX + 24, pY + 50, pX + pW - 24, pY + 50);
 
-        // Title
+        // Titel – note.title statt currentNote.title
         g2.setFont(gp.ui.purisaB.deriveFont(Font.BOLD, 24f));
-        g2.setColor(new Color(80,40,10));
-        int tW = g2.getFontMetrics().stringWidth(currentNote.title);
-        g2.drawString(currentNote.title, pX + pW / 2 - tW / 2, pY +40);
+        g2.setColor(new Color(80, 40, 10));
+        int tW = g2.getFontMetrics().stringWidth(note.title);
+        g2.drawString(note.title, pX + pW / 2 - tW / 2, pY + 40);
 
         // Body Text
         g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 19f));
-        g2.setColor(new Color(60,30,10));
-        String pageText = currentNote.pages[currentPage];
-        drawWrappedText(g2,pageText,pX + 36, pY+ 80,pW- 72,30);
+        g2.setColor(new Color(60, 30, 10));
+        drawWrappedText(g2, note.pages[currentPage], pX + 36, pY + 80, pW - 72, 30);
 
-        // Author
+        // Autor
         g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 19f));
-        g2.setColor(new Color(120,70,30));
-        g2.drawString("~ " + currentNote.author,pX + 36, pY + pH -44);
+        g2.setColor(new Color(120, 70, 30));
+        g2.drawString("~ " + note.author, pX + 36, pY + pH - 44);
 
-        String pageInfo = (currentPage +1) + "/" + currentNote.pages.length;
+        // Seitenangabe
+        String pageInfo = (currentPage + 1) + "/" + note.pages.length;
         g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 16f));
-        g2.setColor(new Color(100,60,20));
+        g2.setColor(new Color(100, 60, 20));
         int piW = g2.getFontMetrics().stringWidth(pageInfo);
         g2.drawString(pageInfo, pX + pW / 2 - piW / 2, pY + pH - 16);
 
-        g2.setColor(new Color(139,90,43));
+        // Trennlinie unten
+        g2.setColor(new Color(139, 90, 43));
         g2.setStroke(new BasicStroke(2f));
-        g2.drawLine(pX + 24, pY + pH -56, pX + pW - 24,pY + pH -56);
-        g2.drawLine(pX + 24, pY + pH -58, pX + pW - 24,pY + pH -58);
+        g2.drawLine(pX + 24, pY + pH - 56, pX + pW - 24, pY + pH - 56);
+        g2.drawLine(pX + 24, pY + pH - 58, pX + pW - 24, pY + pH - 58);
 
+        // Navigation
         g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 16f));
-        g2.setColor(new Color(140,90,40));
-        boolean isLastPage = currentPage >= currentNote.pages.length -1;
+        g2.setColor(new Color(140, 90, 40));
+        boolean isLastPage = currentPage >= note.pages.length - 1;
         g2.drawString(isLastPage ? "[ ENTER ] Close" : "[ ENTER ] Next Page", pX + 36, pY + pH - 16);
-
-        if (currentPage > 0){
+        if (currentPage > 0) {
             g2.drawString("[ BACKSPACE ] Previous", pX + pW - 200, pY + pH - 16);
         }
     }

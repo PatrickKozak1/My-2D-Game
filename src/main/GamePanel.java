@@ -242,7 +242,7 @@ public class GamePanel extends JPanel implements  Runnable {
 
     public  void update(){
 
-        if (gameState == playState){
+        if (gameState == playState || gameState == loreState){
             // PLAYER
             player.update();
             // NPC
@@ -305,10 +305,7 @@ public class GamePanel extends JPanel implements  Runnable {
             drawStart = System.nanoTime();
         }
 
-        // LORE OVERLAY
-        if (gameState == loreState) {
-            loreManager.draw(g2);
-        }
+
 
         // Title SCREEN
         if (gameState == titleState) {
@@ -393,6 +390,11 @@ public class GamePanel extends JPanel implements  Runnable {
             // TUTORIAL OVERLAY (immer ganz oben)
             if (gameState == tutorialState) {
                 tManager.draw(g2);
+            }
+
+            // LORE OVERLAY
+            if (gameState == loreState) {
+                loreManager.draw(g2);
             }
         }
 
