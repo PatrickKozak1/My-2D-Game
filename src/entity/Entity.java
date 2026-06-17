@@ -86,6 +86,10 @@ public class Entity {
     public boolean inRage = false;
     public boolean sleep = false;
     public boolean drawing = true;
+    public boolean poisoned = false;
+    public int poisonTimer = 0;
+    public boolean burning = false;
+    public int burnTimer = 0;
 
 
     // ITEM ATTRIBUTES

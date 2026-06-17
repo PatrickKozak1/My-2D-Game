@@ -5,19 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoreManager {
+
     GamePanel gp;
-
     public List<LoreNote> allNotes = new ArrayList<>();
-    public List <LoreNote> collectedNotes = new ArrayList<>();
-
+    public List<LoreNote> collectedNotes = new ArrayList<>();
     public boolean reading = false;
     private LoreNote currentNote = null;
     private int currentPage = 0;
-
     public boolean journalOpen = false;
     public int journalIndex = 0;
 
-    public LoreManager(GamePanel gp){
+    public LoreManager(GamePanel gp) {
         this.gp = gp;
         setupNotes();
     }
@@ -34,7 +32,6 @@ public class LoreManager {
                         "earth. Strange creatures emerged and drove the people away. " +
                         "Only ruins and whispers remain of what once was."
         ));
-
         allNotes.add(new LoreNote(
                 "old_wizard_diary",
                 "A Wizard's Diary",
@@ -47,7 +44,6 @@ public class LoreManager {
                         "grows weaker. Perhaps a young adventurer will finish what I " +
                         "could not."
         ));
-
         allNotes.add(new LoreNote(
                 "slime_research",
                 "Monster Research Notes",
@@ -59,7 +55,6 @@ public class LoreManager {
                         "producing and projecting fire. Recommend extreme caution when " +
                         "engaging at close range. Do NOT corner them."
         ));
-
         allNotes.add(new LoreNote(
                 "treasure_clue",
                 "Torn Map Fragment",
@@ -70,7 +65,6 @@ public class LoreManager {
                 "...the first seal is guarded by water. The second by fire. " +
                         "The third... I dare not write it here. They are watching."
         ));
-
         allNotes.add(new LoreNote(
                 "merchant_note",
                 "A Merchant's Warning",
@@ -84,22 +78,20 @@ public class LoreManager {
         ));
     }
 
+    // ═══════════════════════════════════════════════════════
+    //  PUBLIC API
+    // ═══════════════════════════════════════════════════════
+
     public LoreNote getNote(String id) {
         for (LoreNote n : allNotes) if (n.id.equals(id)) return n;
         return null;
     }
 
-    public void openNote(String id){
-        System.out.println("openNote called: " + id); // ← temp debug
-        System.out.println("gameState wird gesetzt auf: " + gp.loreState); // ← temp debug
-
+    public void openNote(String id) {
         LoreNote note = getNote(id);
-        if (note == null) {
-            System.out.println("NOTE IST NULL - id nicht gefunden!"); // ← temp debug
-            return;
-        }
+        if (note == null) return;
 
-        if (!note.collected){
+        if (!note.collected) {
             note.collected = true;
             collectedNotes.add(note);
             gp.ui.addMessage("New lore found: " + note.title + "!");
@@ -112,20 +104,33 @@ public class LoreManager {
         gp.gameState = gp.loreState;
     }
 
+    // ← NEU
+    public void openJournal() {
+        if (collectedNotes.isEmpty()) {
+            gp.ui.addMessage("You have not found any notes yet.");
+            return;
+        }
+        journalOpen = true;
+        reading = false;
+        journalIndex = 0;
+        currentPage = 0;
+        gp.gameState = gp.loreState;
+    }
+
     public void nextPage() {
         if (currentNote == null) return;
-        if (currentPage < currentNote.pages.length -1) {
+        if (currentPage < currentNote.pages.length - 1) {
             currentPage++;
-        }else {
+        } else {
             closeReading();
         }
     }
 
-    public void prevPage(){
+    public void prevPage() {
         if (currentPage > 0) currentPage--;
     }
 
-    public void openSelectedJournalNote(){
+    public void openSelectedJournalNote() {
         if (collectedNotes.isEmpty()) return;
         currentNote = collectedNotes.get(journalIndex);
         currentPage = 0;
@@ -133,19 +138,20 @@ public class LoreManager {
         journalOpen = false;
     }
 
-    void closeReading() {
+    public void closeReading() {
         gp.gameState = gp.playState;
         reading = false;
         journalOpen = false;
-        currentNote = null;
         currentPage = 0;
         currentNote = null;
     }
 
-    public void draw(Graphics2D g2) {
-        // Lokale Kopie – Thread-sicher ← NEU
-        LoreNote note = currentNote;
+    // ═══════════════════════════════════════════════════════
+    //  DRAW
+    // ═══════════════════════════════════════════════════════
 
+    public void draw(Graphics2D g2) {
+        LoreNote note = currentNote;
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         g2.setColor(new Color(0, 0, 0, 180));
         g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
@@ -153,17 +159,16 @@ public class LoreManager {
         if (journalOpen && !reading) {
             drawJournal(g2);
         } else if (reading && note != null) {
-            drawReadingScreen(g2, note); // ← note mitgeben
+            drawReadingScreen(g2, note);
         }
     }
 
-    // note als Parameter statt this.currentNote ← NEU
     private void drawReadingScreen(Graphics2D g2, LoreNote note) {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
         int pW = gp.tileSize * 11;
         int pH = gp.tileSize * 9;
-        int pX = gp.screenWidth  / 2 - pW / 2;
+        int pX = gp.screenWidth / 2 - pW / 2;
         int pY = gp.screenHeight / 2 - pH / 2;
 
         drawParchment(g2, pX, pY, pW, pH);
@@ -173,7 +178,7 @@ public class LoreManager {
         g2.drawLine(pX + 24, pY + 48, pX + pW - 24, pY + 48);
         g2.drawLine(pX + 24, pY + 50, pX + pW - 24, pY + 50);
 
-        // Titel – note.title statt currentNote.title
+        // Titel
         g2.setFont(gp.ui.purisaB.deriveFont(Font.BOLD, 24f));
         g2.setColor(new Color(80, 40, 10));
         int tW = g2.getFontMetrics().stringWidth(note.title);
@@ -206,102 +211,97 @@ public class LoreManager {
         g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 16f));
         g2.setColor(new Color(140, 90, 40));
         boolean isLastPage = currentPage >= note.pages.length - 1;
-        g2.drawString(isLastPage ? "[ ENTER ] Close" : "[ ENTER ] Next Page", pX + 36, pY + pH - 16);
+        g2.drawString(isLastPage ? "[ ENTER ] Close" : "[ ENTER ] Next Page",
+                pX + 36, pY + pH - 16);
         if (currentPage > 0) {
             g2.drawString("[ BACKSPACE ] Previous", pX + pW - 200, pY + pH - 16);
         }
     }
 
-    private void drawJournal(Graphics2D g2){
-
+    private void drawJournal(Graphics2D g2) {
         int listX = gp.tileSize;
         int listY = gp.tileSize;
         int listW = gp.tileSize * 7;
         int listH = gp.screenHeight - gp.tileSize * 2;
-        drawParchment(g2,listX,listY,listW,listH);
+        drawParchment(g2, listX, listY, listW, listH);
 
-        // Journal Title
         g2.setFont(gp.ui.purisaB.deriveFont(Font.BOLD, 22f));
-        g2.setColor(new Color(80,40,10));
-        g2.drawString("Journal", listX + 20, listY + 36 );
-        g2.setColor(new Color(139,90,43));
+        g2.setColor(new Color(80, 40, 10));
+        g2.drawString("Journal", listX + 20, listY + 36);
+        g2.setColor(new Color(139, 90, 43));
         g2.setStroke(new BasicStroke(1.5f));
         g2.drawLine(listX + 16, listY + 40, listX + listW - 16, listY + 44);
 
         int entryY = listY + 70;
         for (int i = 0; i < collectedNotes.size(); i++) {
             LoreNote note = collectedNotes.get(i);
-            boolean selected = (i == journalIndex );
+            boolean selected = (i == journalIndex);
 
             if (selected) {
-                g2.setColor(new Color(180, 120,60,100));
-                g2.fillRoundRect(listX + 12, entryY -18, listW - 24,28,6,6);
-                g2.setColor(new Color(139,90,43));
-                g2.drawString(">", listX +16, entryY);
+                g2.setColor(new Color(180, 120, 60, 100));
+                g2.fillRoundRect(listX + 12, entryY - 18, listW - 24, 28, 6, 6);
+                g2.setColor(new Color(139, 90, 43));
+                g2.drawString(">", listX + 16, entryY);
             }
-
             g2.setFont(gp.ui.purisaB.deriveFont(selected ? Font.BOLD : Font.PLAIN, 18f));
             g2.setColor(selected ? new Color(80, 40, 10) : new Color(120, 75, 30));
             g2.drawString(note.title, listX + 36, entryY);
-
             entryY += 36;
         }
+
         g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 15f));
         g2.setColor(new Color(140, 90, 40));
         g2.drawString("[ ENTER ] Read   [ ESC ] Close", listX + 16, listY + listH - 14);
 
-        LoreNote selected = collectedNotes.get(journalIndex);
-        int prevX = listX + listW + gp.tileSize /2;
-        int prevY = listY;
-        int prevW = gp.screenWidth - prevX - gp.tileSize;
-        int prevH = listH;
-        drawParchment(g2, prevX, prevY, prevW, prevH);
+        // Vorschau rechts
+        if (!collectedNotes.isEmpty()) {
+            LoreNote selected = collectedNotes.get(journalIndex);
+            int prevX = listX + listW + gp.tileSize / 2;
+            int prevY = listY;
+            int prevW = gp.screenWidth - prevX - gp.tileSize;
+            int prevH = listH;
+            drawParchment(g2, prevX, prevY, prevW, prevH);
 
-        g2.setFont(gp.ui.purisaB.deriveFont(Font.BOLD, 20f));
-        g2.setColor(new Color(80,40,10));
-        g2.drawString(selected.title, prevX + 20, prevY + 36);
+            g2.setFont(gp.ui.purisaB.deriveFont(Font.BOLD, 20f));
+            g2.setColor(new Color(80, 40, 10));
+            g2.drawString(selected.title, prevX + 20, prevY + 36);
 
-        g2.setColor(new Color(139,90,43));
-        g2.drawLine(prevX + 16, prevY + 44, prevX + prevW - 16, prevY + 44);
+            g2.setColor(new Color(139, 90, 43));
+            g2.drawLine(prevX + 16, prevY + 44, prevX + prevW - 16, prevY + 44);
 
-        g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 17f));
-        g2.setColor(new Color(60,30,10));
-        drawWrappedText(g2,selected.pages[0], prevX + 20, prevY + 72, prevW - 40,28);
+            g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 17f));
+            g2.setColor(new Color(60, 30, 10));
+            drawWrappedText(g2, selected.pages[0], prevX + 20, prevY + 72, prevW - 40, 28);
 
-        g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 15f));
-        g2.setColor(new Color(120,70,30));
-        g2.drawString("~ " + selected.author, prevX + 20, prevY + prevH - 24);
-
+            g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 15f));
+            g2.setColor(new Color(120, 70, 30));
+            g2.drawString("~ " + selected.author, prevX + 20, prevY + prevH - 24);
+        }
     }
 
-    private void drawParchment(Graphics2D g2, int x, int y, int w, int h){
-
-        g2.setColor(new Color(0,0,0,80));
-        g2.fillRoundRect(x + 6, y +6 ,w,h,16,16);
-
-        g2.setColor(new Color(245,225,170));
-        g2.fillRoundRect(x,y,w,h,16,16);
-
-        g2.setColor(new Color(230,205,145,80));
+    private void drawParchment(Graphics2D g2, int x, int y, int w, int h) {
+        g2.setColor(new Color(0, 0, 0, 80));
+        g2.fillRoundRect(x + 6, y + 6, w, h, 16, 16);
+        g2.setColor(new Color(245, 225, 170));
+        g2.fillRoundRect(x, y, w, h, 16, 16);
+        g2.setColor(new Color(230, 205, 145, 80));
         g2.fillRoundRect(x + 6, y + 6, w - 12, h / 2, 10, 10);
-
-        g2.setColor(new Color(139,90,43));
+        g2.setColor(new Color(139, 90, 43));
         g2.setStroke(new BasicStroke(3f));
-        g2.drawRoundRect(x,y,w,h,16,16);
-
-        g2.setColor(new Color(160,110,60,150));
+        g2.drawRoundRect(x, y, w, h, 16, 16);
+        g2.setColor(new Color(160, 110, 60, 150));
         g2.setStroke(new BasicStroke(1f));
         g2.drawRoundRect(x + 8, y + 8, w - 16, h - 16, 10, 10);
-
         int cs = 12;
-        g2.setColor(new Color(139,90,43));
-        g2.fillOval(x + 6, y+ 6, cs, cs);
+        g2.setColor(new Color(139, 90, 43));
+        g2.fillOval(x + 6, y + 6, cs, cs);
         g2.fillOval(x + w - 18, y + 6, cs, cs);
         g2.fillOval(x + 6, y + h - 18, cs, cs);
         g2.fillOval(x + w - 18, y + h - 18, cs, cs);
     }
 
-    private void drawWrappedText(Graphics2D g2, String text, int x, int y, int maxWidth, int lineHeight) {
+    private void drawWrappedText(Graphics2D g2, String text, int x, int y,
+                                 int maxWidth, int lineHeight) {
         FontMetrics fm = g2.getFontMetrics();
         String[] paragraphs = text.split("\n");
         int currentY = y;
@@ -309,25 +309,21 @@ public class LoreManager {
         for (String paragraph : paragraphs) {
             String[] words = paragraph.split(" ");
             StringBuilder line = new StringBuilder();
-
             for (String word : words) {
                 String test = line.length() > 0 ? line + " " + word : word;
                 if (fm.stringWidth(test) > maxWidth) {
-                    g2.drawString(line.toString(),x,currentY);
+                    g2.drawString(line.toString(), x, currentY);
                     currentY += lineHeight;
                     line = new StringBuilder(word);
-                }else {
+                } else {
                     line = new StringBuilder(test);
                 }
             }
-            if (line.length() > 0){
+            if (line.length() > 0) {
                 g2.drawString(line.toString(), x, currentY);
                 currentY += lineHeight;
             }
             currentY += 8;
         }
     }
-
-
-
 }

@@ -401,8 +401,42 @@ public class Player extends Entity {
         if (mana > maxMana) {
             mana = maxMana;
         }
+
+        if (poisoned) {
+            poisonTimer--;
+
+            if (spriteCounter % 15 == 0) {
+                Particle p = new Particle(gp, this, new Color(50, 200, 50), 6, 1, 50,
+                        (int)(Math.random() * 5) - 2, -1);
+                gp.particleList.add(p);
+            }
+
+            if (poisonTimer <= 0) {
+                poisoned = false;
+                life -= 1;
+            }
+        }
+
+        if (burning) {
+            burnTimer--;
+
+            if (spriteCounter % 8 == 0) {
+                Color fireColor = (Math.random() > 0.5)
+                        ? new Color(255, 80, 0)
+                        : new Color(255, 180, 0);
+                Particle p = new Particle(gp, this, fireColor, 8, 2, 25,
+                        (int)(Math.random() * 5) - 2, -2);
+                gp.particleList.add(p);
+            }
+
+            if (burnTimer <= 0) {
+                burning = false;
+                life -= 1;
+            }
+        }
         if (keyH.godModeOn == false){
             if (life <= 0){
+                dropGravestone();
                 gp.gameState = gp.gameOverState;
                 gp.ui.commandNum = -1;
                 gp.stopMusic();
@@ -638,6 +672,36 @@ public class Player extends Entity {
                 life -= damage;
                 invincible =  true;
                 transparent = true;
+
+                String mName = gp.monster[gp.currentMap][i].name;
+                if (mName.equals("Green Slime") && !poisoned){
+                    poisoned = true;
+                    poisonTimer = 300;
+                    gp.ui.addMessage("You are poisoned!");
+                }
+                if (mName.equals("Red Slime") && !burning){
+                    burning = true;
+                    burnTimer = 180;
+                    gp.ui.addMessage("you are burning!");
+                }
+            }
+        }
+    }
+
+    public void dropGravestone(){
+        for (int i = 0; i < gp.obj[gp.currentMap].length; i++) {
+            if (gp.obj[gp.currentMap][i] == null){
+
+                OBJ_Gravestone grave = new OBJ_Gravestone(gp);
+                grave.worldX = worldX;
+                grave.worldY = worldY;
+
+                grave.storedItems.addAll(inventory);
+                inventory.clear();
+
+                gp.obj[gp.currentMap][i] = grave;
+                gp.ui.addMessage("Your items lie at your grave...");
+                break;
             }
         }
     }
@@ -712,7 +776,37 @@ public class Player extends Entity {
         if (drawing == true ){
             g2.drawImage(image, tempScreenX, tempScreenY, null);
         }
+        if ((poisoned || burning) && image != null) {
+            // Isoliertes Tint-Image – nur Sprite-Pixel werden eingefärbt
+            BufferedImage tintLayer = new BufferedImage(
+                    image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D tg = tintLayer.createGraphics();
 
+            // Sprite auf das Tint-Layer zeichnen
+            tg.drawImage(image, 0, 0, null);
+
+            // SRC_ATOP: Farbe NUR auf nicht-transparente Pixel anwenden
+            float tintA;
+            Color tintC;
+            if (burning) {
+                tintA = 0.35f + 0.2f * (float)(Math.sin(System.currentTimeMillis() * 0.012));
+                tintC = new Color(255, 80, 0);
+            } else {
+                tintA = 0.25f + 0.1f * (float)(Math.sin(System.currentTimeMillis() * 0.007));
+                tintC = new Color(0, 210, 50);
+            }
+            tintA = Math.max(0f, Math.min(0.55f, tintA));
+
+            tg.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, tintA));
+            tg.setColor(tintC);
+            tg.fillRect(0, 0, image.getWidth(), image.getHeight());
+            tg.dispose();
+
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+            g2.drawImage(tintLayer, tempScreenX, tempScreenY, null);
+        }
+
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1f));
 
 
         // Reset  alpha

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import object.OBJ_Gravestone;
 
 public class GamePanel extends JPanel implements  Runnable {
 
@@ -47,6 +48,7 @@ public class GamePanel extends JPanel implements  Runnable {
     public QuestManager questManager = new QuestManager(this);
     public WeatherManager weatherManager = new WeatherManager(this);
     public LoreManager loreManager = new LoreManager(this);
+    public TransitionManager transition = new TransitionManager(this);
 
     //FPS
     int FPS = 60;
@@ -66,6 +68,7 @@ public class GamePanel extends JPanel implements  Runnable {
     SaveLoad saveLoad = new SaveLoad(this);
     public EntityGenerator eGenerator = new EntityGenerator(this);
     public CutsceneManager csManager = new CutsceneManager(this);
+    public CipherManager cipherManager = new CipherManager(this);
     Thread gameThread;
 
     // ENTITY AND OBJECT
@@ -95,6 +98,8 @@ public class GamePanel extends JPanel implements  Runnable {
     public final int cutsceneState = 11;
     public final int upgradeState = 12;
     public final int loreState = 13;
+    public final int cipherState = 14;
+
 
     // OTHERS
     public boolean bossBattleOn = false;
@@ -289,11 +294,15 @@ public class GamePanel extends JPanel implements  Runnable {
             }
             eManager.update();
             weatherManager.update();
-            System.out.println("Weather: " + weatherManager.currentWeather); // ← temp
+            transition.update();
         }
         if (gameState == pauseState){
             // nothing
         }
+        if (gameState == cipherState) {
+            cipherManager.update();
+        }
+
 
 
     }
@@ -396,6 +405,10 @@ public class GamePanel extends JPanel implements  Runnable {
             if (gameState == loreState) {
                 loreManager.draw(g2);
             }
+
+            if (gameState == cipherState) {
+                cipherManager.draw(g2);
+            }
         }
 
 
@@ -417,6 +430,8 @@ public class GamePanel extends JPanel implements  Runnable {
             g2.drawString("God Mode:" + keyH.godModeOn,x,y);
 
         }
+
+        transition.draw(g2);
     }
 
     public void drawToScreen(){

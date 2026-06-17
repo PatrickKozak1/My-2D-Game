@@ -37,6 +37,11 @@ public class UI {
     public Entity npc;
     public int charIndex = 0;
     public String combinedText = "";
+    private int prevLife = -1;
+    private int heartBounce = 0;
+    private int heartBounceIdx = 0;
+    private int manaBlinkTimer = 0;
+    private float manaBlinkAlpha = 1f;
 
 
 
@@ -128,7 +133,10 @@ public class UI {
 
         // PLAY STATE
         if (gp.gameState == gp.playState || gp.gameState == gp.tutorialState){
+            drawStatusVignette();
             drawPlayerLife();
+            drawPlayerMana();
+            drawStatusEffects();
             drawMonsterLife();
             drawMessage();
             gp.questManager.draw(g2);
@@ -958,69 +966,76 @@ public class UI {
     }
 
 
-    public void drawPlayerLife(){
+    public void drawPlayerLife() {
+        // Initialize
+        if (prevLife == -1) prevLife = gp.player.life;
 
-        int x = gp.tileSize/2;
-        int y = gp.tileSize/2;
-        int i = 0;
-        int iconSize = 32;
+        // Schaden erkannt → Bounce triggern
+        if (gp.player.life < prevLife) {
+            // Life → Heart-Index umrechnen ← war der Bug
+            heartBounceIdx = Math.max(0, (gp.player.life) / 2);
+            heartBounce    = 20;
+        }
+        prevLife = gp.player.life;
+        if (heartBounce > 0) heartBounce--;
 
-        // DRAW MAX LIFE (leere Herzen) - mit Zeilenumbruch
-        while (i < gp.player.maxLife/2){
-            g2.drawImage(heart_blank, x, y, iconSize, iconSize, null);
-            i++;
-            x += iconSize;
-            if (i % 8 == 0) {
-                x = gp.tileSize/2;
-                y += iconSize;
-            }
+        int x = gp.tileSize / 2;
+        int y = gp.tileSize / 2;
+
+        // Leere Herzen
+        for (int i = 0; i < gp.player.maxLife / 2; i++) {
+            g2.drawImage(heart_blank, x + 48 * i, y, null);
         }
 
-        // RESET
-        x = gp.tileSize/2;
-        y = gp.tileSize/2;
-        i = 0;
-        int heartNum = 0; // ← zählt gezeichnete Herzen für Zeilenumbruch
+        // Volle / halbe Herzen
+        int hearts = gp.player.life;
+        for (int i = 0; i < gp.player.maxLife / 2; i++) {
+            if (hearts <= 0) break;
 
-        // DRAW CURRENT LIFE - jetzt MIT Zeilenumbruch
-        while (i < gp.player.life) {
-            g2.drawImage(heart_half, x, y, iconSize, iconSize, null);
-            i++;
-            if (i < gp.player.life){
-                g2.drawImage(heart_full, x, y, iconSize, iconSize, null);
+            BufferedImage img;
+            if (hearts >= 2) { img = heart_full; hearts -= 2; }
+            else             { img = heart_half; hearts = 0;  }
+
+            int drawX = x + 48 * i;
+            int drawY = y;
+
+            if (i == heartBounceIdx && heartBounce > 0) {
+                float scale  = 1f + 0.3f * (heartBounce / 20f);
+                int   offset = (int)(24 * (scale - 1));
+                int   size   = (int)(48 * scale);
+                g2.drawImage(img, drawX - offset, drawY - offset, size, size, null);
+            } else {
+                g2.drawImage(img, drawX, drawY, null);
             }
-            i++;
-            heartNum++;
-            x += iconSize;
-
-            if (heartNum % 8 == 0) { // ← das fehlte komplett
-                x = gp.tileSize/2;
-                y += iconSize;
-            }
-        }
-
-        // Mana-Y dynamisch berechnen basierend auf Herzreihen
-        int heartRows = (int) Math.ceil((gp.player.maxLife / 2.0) / 8.0);
-        int manaY = gp.tileSize/2 + (heartRows * iconSize);
-
-        // DRAW MAX MANA
-        x = (gp.tileSize/2) - 5;
-        i = 0;
-        while (i < gp.player.maxMana) {
-            g2.drawImage(crystal_blank, x, manaY, iconSize, iconSize, null);
-            i++;
-            x += 35;
-        }
-
-        // DRAW MANA
-        x = (gp.tileSize/2) - 5;
-        i = 0;
-        while (i < gp.player.mana){
-            g2.drawImage(crystal_full, x, manaY, iconSize, iconSize, null);
-            i++;
-            x += 35;
         }
     }
+
+    public void drawPlayerMana() {
+        int x = gp.tileSize / 2;
+        int y = (int)(gp.tileSize * 1.5);
+
+        if (gp.player.mana <= 1) {
+            manaBlinkTimer++;
+            float raw = 0.4f + 0.6f * (float)(Math.sin(manaBlinkTimer * 0.15) * 0.5 + 0.5);
+            manaBlinkAlpha = Math.min(1f, Math.max(0f, raw));
+        } else {
+            manaBlinkTimer = 0;
+            manaBlinkAlpha = 1f;
+        }
+
+        // Composite VOR dem Zeichnen setzen
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, manaBlinkAlpha));
+
+        for (int i = 0; i < gp.player.maxMana; i++) {
+            g2.drawImage(crystal_blank, x + 35 * i, y, null);
+        }
+        for (int i = 0; i < gp.player.mana; i++) {
+            g2.drawImage(crystal_full, x + 35 * i, y, null);
+        }
+
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+    }
+
 
     public void drawMonsterLife(){
 
@@ -1339,8 +1354,95 @@ public class UI {
 
     }
 
+    private void drawStatusEffects() {
+        int x = gp.tileSize / 2;
+        int y = (int)(gp.tileSize * 3.2);
+        int iconSize = 32;
+
+        if (gp.player.poisoned) {
+            drawStatusIcon(g2, x, y, iconSize,
+                    new Color(30, 180, 30),
+                    new Color(20, 120, 20),
+                    "☠",
+                    (float)gp.player.poisonTimer / 300f);
+            x += iconSize + 10;
+        }
+
+        if (gp.player.burning) {
+            drawStatusIcon(g2, x, y, iconSize,
+                    new Color(255, 90, 0),
+                    new Color(180, 40, 0),
+                    "🔥",
+                    (float)gp.player.burnTimer / 180f);
+        }
+    }
+
+    private void drawStatusIcon(Graphics2D g2, int x, int y, int size,
+                                Color main, Color dark, String symbol, float timerRatio) {
+        timerRatio = Math.max(0f, Math.min(1f, timerRatio));
+
+        g2.setColor(new Color(0,0,0,160));
+        g2.fillOval(x - 2, y -2, size + 4, size + 4);
+
+        g2.setColor(main);
+        g2.fillOval(x,y,size,size);
+
+        g2.setColor(dark);
+        g2.setStroke(new BasicStroke(3f));
+        int arcAngel = (int) (360 * timerRatio);
+        g2.drawArc(x -3, y - 3, size + 6, size + 6, 90, -arcAngel);
+
+        g2.setColor(new Color(255,255,255,80));
+        g2.setStroke(new BasicStroke(1f));
+        g2.drawOval(x,y,size,size);
+
+        g2.setFont(purisaB.deriveFont(Font.BOLD, 14f));
+        g2.setColor(Color.white);
+        FontMetrics fm = g2.getFontMetrics();
+        int sw = fm.stringWidth(symbol);
+        g2.drawString(symbol,x +size / 2 - sw / 2, y + size / 2 + 5);
+    }
 
 
+    private void drawStatusVignette() {
+        if (!gp.player.poisoned && !gp.player.burning) return;
+        int r,gr,b;
+        double speed;
+        if (gp.player.burning) {
+            r = 255; gr = 50; b = 0;
+            speed = 0.009;
+        }else {
+            r = 0; gr = 190; b = 0;
+            speed = 0.005;
+        }
+
+        long time = System.currentTimeMillis();
+        int alpha = (int)(35 + 25 * Math.sin(time * speed));
+        alpha = Math.max(0, Math.min(90,alpha));
+
+        Color edge = new Color(r,gr,b,alpha);
+        Color clear = new Color(r, gr,b,0);
+
+        int w = gp.screenWidth;
+        int h = gp.screenHeight;
+        int size = 130;
+
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
+        g2.setPaint(new GradientPaint(0,0,edge,0,size,clear));
+        g2.fillRect(0,0,w,size);
+
+        g2.setPaint(new GradientPaint(0, h - size, clear,0,h,edge));
+        g2.fillRect(0,h - size, w,size);
+
+        g2.setPaint(new GradientPaint(0,0,edge,size,0,clear));
+        g2.fillRect(0,0,size,h);
+
+        g2.setPaint(new GradientPaint(w - size, 0, clear,w,0,edge));
+        g2.fillRect(w - size, 0, size,h);
+
+        g2.setPaint(null);
+    }
 
     public void drawSubWindow(int x, int y, int width, int height){
 

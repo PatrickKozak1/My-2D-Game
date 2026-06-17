@@ -14,7 +14,6 @@ public class WeatherManager {
     public static final int RAIN = 1;
     public static final int STORM = 2;
     public static final int FOG = 3;
-    public static final int SNOW = 4;
 
     // Default weather
     public int currentWeather = CLEAR;
@@ -44,7 +43,7 @@ public class WeatherManager {
         initParticles();
         scheduleNextLightning();
         weatherDuration = rand.nextInt(3600) +1800;
-        int[] possible = {CLEAR, CLEAR, RAIN, FOG, SNOW, STORM};
+        int[] possible = {CLEAR, CLEAR, RAIN, FOG, STORM};
         currentWeather = possible[rand.nextInt(possible.length)];
     }
 
@@ -84,7 +83,6 @@ public class WeatherManager {
             case RAIN: return "It starts to rain.";
             case STORM: return "A storm is approaching!";
             case FOG: return "Fog rolls in...";
-            case SNOW: return "It begins to snow.";
 
         };
         return "";
@@ -95,7 +93,7 @@ public class WeatherManager {
         if (weatherTimer >= weatherDuration) {
             weatherTimer = 0;
             weatherDuration = rand.nextInt(3600) +1800;
-            int[] possible = {CLEAR, CLEAR, RAIN, FOG, SNOW, STORM};
+            int[] possible = {CLEAR, CLEAR, RAIN, FOG, STORM};
             int next;
             do {
                 next = possible[rand.nextInt(possible.length)];
@@ -104,7 +102,6 @@ public class WeatherManager {
         }
 
         updateRain();
-        updateSnow();;
         updateLightning();
         updateFog();
         updateDarkness();
@@ -130,17 +127,7 @@ public class WeatherManager {
         }
     }
 
-    private void updateSnow() {
-        if (currentWeather != SNOW) return;
-        for (int i=0; i < SNOW_COUNT; i++){
-            snowFlakes[i][1] += snowFlakes[i][2];
-            snowFlakes[i][0] += (float)(Math.sin((snowFlakes[i][1] + snowFlakes[i][3]) * 0.05) * 0.8);
-            if (snowFlakes[i][1] > gp.screenHeight){
-                snowFlakes[i][1] = -5;
-                snowFlakes[i][0] = rand.nextFloat() * gp.screenWidth;
-            }
-        }
-    }
+
 
     private void updateLightning() {
         if (currentWeather != STORM){lightningAlpha = 0; return;}
@@ -196,9 +183,6 @@ public class WeatherManager {
             drawRain(g2);
         }
 
-        if (currentWeather == SNOW) {
-            drawSnow(g2);
-        }
         if (fogAlpha > 0){
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, fogAlpha));
             g2.setColor(new Color(200,200,210));

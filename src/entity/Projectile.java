@@ -35,6 +35,12 @@ public class Projectile extends Entity{
                 damagePlayer(attack);
                 generateParticle(user.projectile,user.projectile);
                 alive = false;
+
+                if (user.name.equals("Red Slime") && !gp.player.burning) {
+                    gp.player.burning   = true;
+                    gp.player.burnTimer = 180;
+                    gp.ui.addMessage("You are burning!");
+                }
             }
         }
 

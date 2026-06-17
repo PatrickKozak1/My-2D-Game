@@ -56,6 +56,21 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldY = gp.tileSize * 20;
         i++;
 
+        gp.obj[mapNum][i] = new OBJ_CipherScroll(gp, "cipher_intro");
+        gp.obj[mapNum][i].worldX = gp.tileSize * 17;
+        gp.obj[mapNum][i].worldY = gp.tileSize * 20;
+        i++;
+
+        gp.obj[mapNum][i] = new OBJ_CipherScroll(gp, "cipher_two");
+        gp.obj[mapNum][i].worldX = gp.tileSize * 15;
+        gp.obj[mapNum][i].worldY = gp.tileSize * 20;
+        i++;
+
+        gp.obj[mapNum][i] = new OBJ_CipherScroll(gp, "cipher_three");
+        gp.obj[mapNum][i].worldX = gp.tileSize * 12;
+        gp.obj[mapNum][i].worldY = gp.tileSize * 20;
+        i++;
+
 //        gp.obj[i] = new OBJ_Axe(gp);
 //        gp.obj[i].worldX = gp.tileSize*23;
 //        gp.obj[i].worldY = gp.tileSize*14;
