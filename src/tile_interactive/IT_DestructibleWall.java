@@ -2,20 +2,16 @@ package tile_interactive;
 
 import entity.Entity;
 import main.GamePanel;
-import object.OBJ_Coin_Bronze;
-import object.OBJ_Heart;
-import object.OBJ_ManaCrystal;
 
 import java.awt.*;
-import java.util.Random;
 
-public class IT_DestructibleWall extends InteractiveTile{
+public class IT_DestructibleWall extends InteractiveTile {
 
 
     GamePanel gp;
 
     public IT_DestructibleWall(GamePanel gp, int col, int row) {
-        super(gp,col,row);
+        super(gp, col, row);
         this.gp = gp;
 
         this.worldX = gp.tileSize * col;
@@ -23,20 +19,20 @@ public class IT_DestructibleWall extends InteractiveTile{
 
         down1 = setup("/tiles_interactivess/destructiblewall", gp.tileSize, gp.tileSize);
         destructible = true;
-        life =  3;
+        life = 3;
     }
 
-    public void playSE(){
+    public void playSE() {
         gp.playSE(3);
     }
 
-    public InteractiveTile getDestroyFrom(){
-        InteractiveTile tile =  null;
+    public InteractiveTile getDestroyFrom() {
+        InteractiveTile tile = null;
         return tile;
     }
 
-    public Color getParticleColor () {
-        Color color = new Color(65,65,65);
+    public Color getParticleColor() {
+        Color color = new Color(65, 65, 65);
         return color;
     }
 
@@ -45,19 +41,20 @@ public class IT_DestructibleWall extends InteractiveTile{
         return size;
     }
 
-    public int getParticleSpeed(){
+    public int getParticleSpeed() {
         int speed = 1;
         return speed;
     }
-    public int getParticleMaxLife(){
+
+    public int getParticleMaxLife() {
         int maxLife = 20;
         return maxLife;
     }
 
-    public boolean isCorrectItem(Entity entity){
+    public boolean isCorrectItem(Entity entity) {
         boolean isCorrectItem = false;
 
-        if (entity.currentWeapon.type == type_pickaxe){
+        if (entity.currentWeapon.type == type_pickaxe) {
             isCorrectItem = true;
         }
 

@@ -17,13 +17,13 @@ public class OBJ_ManaCrystal extends Entity {
         type = type_pickupOnly;
         name = objName;
         value = 1;
-        down1 = setup("/objects/manacrystal_full",gp.tileSize,gp.tileSize);
-        image  = setup("/objects/manacrystal_full",gp.tileSize,gp.tileSize);
-        image2  = setup("/objects/manacrystal_blank",gp.tileSize,gp.tileSize);
+        down1 = setup("/objects/manacrystal_full", gp.tileSize, gp.tileSize);
+        image = setup("/objects/manacrystal_full", gp.tileSize, gp.tileSize);
+        image2 = setup("/objects/manacrystal_blank", gp.tileSize, gp.tileSize);
 
     }
 
-    public boolean use (Entity entity){
+    public boolean use(Entity entity) {
         gp.playSE(16);
         gp.ui.addMessage("Mana +" + value);
         entity.mana += value;

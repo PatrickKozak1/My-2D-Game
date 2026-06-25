@@ -15,12 +15,13 @@ public class PathFinder {
     boolean goalReached = false;
     int step = 0;
 
-    public PathFinder(GamePanel gp){
+    public PathFinder(GamePanel gp) {
 
         this.gp = gp;
         instantiateNodes();
     }
-    public void instantiateNodes(){
+
+    public void instantiateNodes() {
 
         node = new Node[gp.maxWorldCol][gp.maxWorldRow];
 
@@ -29,7 +30,7 @@ public class PathFinder {
 
         while (col < gp.maxWorldCol && row < gp.maxWorldRow) {
 
-            node[col][row] = new Node(col,row);
+            node[col][row] = new Node(col, row);
 
             col++;
             if (col == gp.maxWorldCol) {
@@ -64,6 +65,7 @@ public class PathFinder {
         goalReached = false;
         step = 0;
     }
+
     public void setNodes(int startCol, int startRow, int goalCol, int goalRow, Entity entity) {
 
         resetNodes();
@@ -85,9 +87,9 @@ public class PathFinder {
 
             // CHECK INTERACTIVE TILES
             for (int i = 0; i < gp.iTile[1].length; i++) {
-                if (gp.iTile[gp.currentMap][i] != null && gp.iTile[gp.currentMap][i].destructible == true){
-                    int itCol = gp.iTile[gp.currentMap][i].worldX/gp.tileSize;
-                    int itRow = gp.iTile[gp.currentMap][i].worldY/gp.tileSize;
+                if (gp.iTile[gp.currentMap][i] != null && gp.iTile[gp.currentMap][i].destructible == true) {
+                    int itCol = gp.iTile[gp.currentMap][i].worldX / gp.tileSize;
+                    int itRow = gp.iTile[gp.currentMap][i].worldY / gp.tileSize;
                     node[itCol][itRow].solid = true;
                 }
             }
@@ -177,7 +179,7 @@ public class PathFinder {
 //        return goalReached;
 //    }
 
-    public boolean search(){
+    public boolean search() {
 
         // Sicherheits-Check
         if (currentNode == null || openList.size() == 0) {
@@ -192,10 +194,10 @@ public class PathFinder {
             currentNode.checked = true;
             openList.remove(currentNode);
 
-            if (row - 1 >= 0) openNode(node[col][row-1]);
-            if (col - 1 >= 0) openNode(node[col-1][row]);
-            if (row + 1 < gp.maxWorldRow) openNode(node[col][row+1]);
-            if (col + 1 < gp.maxWorldCol) openNode(node[col+1][row]);
+            if (row - 1 >= 0) openNode(node[col][row - 1]);
+            if (col - 1 >= 0) openNode(node[col - 1][row]);
+            if (row + 1 < gp.maxWorldRow) openNode(node[col][row + 1]);
+            if (col + 1 < gp.maxWorldCol) openNode(node[col + 1][row]);
 
             if (openList.size() == 0) break;
 
@@ -203,11 +205,11 @@ public class PathFinder {
             int bestNodefCost = 999;
 
             for (int i = 0; i < openList.size(); i++) {
-                if (openList.get(i).fCost < bestNodefCost){
+                if (openList.get(i).fCost < bestNodefCost) {
                     bestNodeIndex = i;
                     bestNodefCost = openList.get(i).fCost;
-                } else if (openList.get(i).fCost == bestNodefCost){
-                    if (openList.get(i).gCost < openList.get(bestNodeIndex).gCost){
+                } else if (openList.get(i).fCost == bestNodefCost) {
+                    if (openList.get(i).gCost < openList.get(bestNodeIndex).gCost) {
                         bestNodeIndex = i;
                     }
                 }
@@ -215,7 +217,7 @@ public class PathFinder {
 
             currentNode = openList.get(bestNodeIndex);
 
-            if (currentNode == goalNode){
+            if (currentNode == goalNode) {
                 goalReached = true;
                 trackThePath();
             }
@@ -224,7 +226,7 @@ public class PathFinder {
         return goalReached;
     }
 
-    public void openNode(Node node){
+    public void openNode(Node node) {
 
         if (node.open == false && node.checked == false && node.solid == false) {
 
@@ -238,7 +240,7 @@ public class PathFinder {
 
     private void trackThePath() {
         Node current = goalNode;
-        while (current != startNode){
+        while (current != startNode) {
             pathList.add(0, current);
             current = current.parent;
         }

@@ -5,7 +5,6 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import java.net.URL;
-import java.nio.file.Files;
 
 public class Sound {
 
@@ -41,39 +40,55 @@ public class Sound {
         soundURL[22] = getClass().getResource("/sound/216675__hitrison__stick-swoosh-whoosh.wav");
     }
 
-    public void setFile(int i){
+    public void setFile(int i) {
 
         try {
             AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
             clip = AudioSystem.getClip();
             clip.open(ais);
-            fc = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
+            fc = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
             chackVolume();
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
     }
-    public void play(){
+
+    public void play() {
 
         clip.start();
     }
-    public void loop(){
+
+    public void loop() {
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
-    public void stop(){
+
+    public void stop() {
         clip.stop();
     }
-    public void chackVolume(){
 
-        switch (volumeScale){
-            case 0: volume = -80f; break;
-            case 1: volume = -20f; break;
-            case 2: volume = - 12; break;
-            case 3: volume = -5f; break;
-            case 4: volume = 1f; break;
-            case 5: volume = 6f; break;
+    public void chackVolume() {
+
+        switch (volumeScale) {
+            case 0:
+                volume = -80f;
+                break;
+            case 1:
+                volume = -20f;
+                break;
+            case 2:
+                volume = -12;
+                break;
+            case 3:
+                volume = -5f;
+                break;
+            case 4:
+                volume = 1f;
+                break;
+            case 5:
+                volume = 6f;
+                break;
         }
         fc.setValue(volume);
     }

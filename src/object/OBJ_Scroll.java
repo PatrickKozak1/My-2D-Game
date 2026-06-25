@@ -21,16 +21,16 @@ public class OBJ_Scroll extends Entity {
 
         solidArea.x = 4;
         solidArea.y = 4;
-        solidArea.width = gp.tileSize -8;
-        solidArea.height = gp.tileSize -8;
+        solidArea.width = gp.tileSize - 8;
+        solidArea.height = gp.tileSize - 8;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-        down1  = generateScrollSprite();
-        down2  = down1;
-        up1    = down1;
-        up2    = down1;
-        left1  = down1;
-        left2  = down1;
+        down1 = generateScrollSprite();
+        down2 = down1;
+        up1 = down1;
+        up2 = down1;
+        left1 = down1;
+        left2 = down1;
         right1 = down1;
         right2 = down1;
 

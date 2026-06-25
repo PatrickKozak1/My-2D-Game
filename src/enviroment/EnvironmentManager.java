@@ -1,28 +1,30 @@
 package enviroment;
 
-import entity.Entity;
 import main.GamePanel;
 
 import java.awt.*;
 
 public class EnvironmentManager {
 
-        GamePanel gp;
-        public Lighting lighting;
+    GamePanel gp;
+    public Lighting lighting;
 
-        public EnvironmentManager(GamePanel gp) {
-            this.gp = gp;
-        }
-        public void setup() {
+    public EnvironmentManager(GamePanel gp) {
+        this.gp = gp;
+    }
 
-            lighting = new Lighting(gp);
-        }
-        public void update(){
+    public void setup() {
 
-            lighting.update();
+        lighting = new Lighting(gp);
+    }
 
-        }
-        public void draw(Graphics2D g2) {
-                lighting.draw(g2);
-        }
+    public void update() {
+
+        lighting.update();
+
+    }
+
+    public void draw(Graphics2D g2) {
+        lighting.draw(g2);
+    }
 }

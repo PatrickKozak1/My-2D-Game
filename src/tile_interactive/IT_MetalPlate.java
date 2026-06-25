@@ -2,7 +2,7 @@ package tile_interactive;
 
 import main.GamePanel;
 
-public class IT_MetalPlate extends InteractiveTile{
+public class IT_MetalPlate extends InteractiveTile {
 
 
     GamePanel gp;
@@ -10,7 +10,7 @@ public class IT_MetalPlate extends InteractiveTile{
 
 
     public IT_MetalPlate(GamePanel gp, int col, int row) {
-        super(gp,col,row);
+        super(gp, col, row);
         this.gp = gp;
 
         this.worldX = gp.tileSize * col;
@@ -19,7 +19,7 @@ public class IT_MetalPlate extends InteractiveTile{
         name = itName;
         down1 = setup("/tiles_interactivess/metalplate", gp.tileSize, gp.tileSize);
 
-        solidArea.x =  0;
+        solidArea.x = 0;
         solidArea.y = 0;
         solidArea.width = 0;
         solidArea.height = 0;

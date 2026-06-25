@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.Random;
 
 
-public class NPC_OldMan extends Entity{
+public class NPC_OldMan extends Entity {
 
     private boolean introShown = false;
 
@@ -30,19 +30,20 @@ public class NPC_OldMan extends Entity{
         getImage();
         setDialogue();
     }
-    public void getImage(){
-        up1 = setup("/npc/oldman_up_1",gp.tileSize,gp.tileSize);
-        up2 = setup("/npc/oldman_up_2",gp.tileSize,gp.tileSize);
-        down1 = setup("/npc/oldman_down_1",gp.tileSize,gp.tileSize);
-        down2 = setup("/npc/oldman_down_2",gp.tileSize,gp.tileSize);
-        left1 = setup("/npc/oldman_left_1",gp.tileSize,gp.tileSize);
-        left2 = setup("/npc/oldman_left_2",gp.tileSize,gp.tileSize);
-        right1 = setup("/npc/oldman_right_1",gp.tileSize,gp.tileSize);
-        right2 = setup("/npc/oldman_right_2",gp.tileSize,gp.tileSize);
+
+    public void getImage() {
+        up1 = setup("/npc/oldman_up_1", gp.tileSize, gp.tileSize);
+        up2 = setup("/npc/oldman_up_2", gp.tileSize, gp.tileSize);
+        down1 = setup("/npc/oldman_down_1", gp.tileSize, gp.tileSize);
+        down2 = setup("/npc/oldman_down_2", gp.tileSize, gp.tileSize);
+        left1 = setup("/npc/oldman_left_1", gp.tileSize, gp.tileSize);
+        left2 = setup("/npc/oldman_left_2", gp.tileSize, gp.tileSize);
+        right1 = setup("/npc/oldman_right_1", gp.tileSize, gp.tileSize);
+        right2 = setup("/npc/oldman_right_2", gp.tileSize, gp.tileSize);
 
     }
 
-    public void setDialogue(){
+    public void setDialogue() {
         dialogues[0][0] = "Hello, lad.";
         dialogues[0][1] = "So you've come to this island to \nfind the treasure?";
         dialogues[0][2] = "I used to be a great wizard but now... \nI'm a bit too old for taking an adventure";
@@ -69,7 +70,7 @@ public class NPC_OldMan extends Entity{
 
     }
 
-    public void setAction(){
+    public void setAction() {
 
         if (onPath == true) {
 //            int goalCol = 10;
@@ -78,23 +79,23 @@ public class NPC_OldMan extends Entity{
 //            int goalRow = (gp.player.worldY + gp.player.solidArea.y)/gp.tileSize;
 //
 //            searchPath(goalCol,goalRow);
-        }else  {
-            actionLockCounter ++;
+        } else {
+            actionLockCounter++;
 
-            if (actionLockCounter == 120){
+            if (actionLockCounter == 120) {
                 Random random = new Random();
-                int i = random.nextInt(100)+1; // pick up a number from 1 to 100
+                int i = random.nextInt(100) + 1; // pick up a number from 1 to 100
 
-                if (i <= 25){
+                if (i <= 25) {
                     direction = "up";
                 }
-                if (i > 25 && i <= 50){
+                if (i > 25 && i <= 50) {
                     direction = "down";
                 }
-                if (i > 50 && i <= 75){
+                if (i > 50 && i <= 75) {
                     direction = "left";
                 }
-                if (i > 75 && i <= 100){
+                if (i > 75 && i <= 100) {
                     direction = "right";
                 }
                 actionLockCounter = 0;
@@ -103,25 +104,26 @@ public class NPC_OldMan extends Entity{
 
 
     }
-    public void speak(){
+
+    public void speak() {
 
         facePlayer();
         Quest q = gp.questManager.getQuest("slime_hunter");
 
-        if (q.rewarded){
-            startDialogue(this,6);
+        if (q.rewarded) {
+            startDialogue(this, 6);
 
-        }else if (q.completed) {
-            startDialogue(this,5);
+        } else if (q.completed) {
+            startDialogue(this, 5);
             gp.questManager.rewardQuest(q);
-        }else if (q.accepted) {
-            startDialogue(this,4);
-        }else if (introShown) {
-            startDialogue(this,3);
+        } else if (q.accepted) {
+            startDialogue(this, 4);
+        } else if (introShown) {
+            startDialogue(this, 3);
             gp.questManager.acceptQuest("slime_hunter");
-        }else {
+        } else {
             introShown = true;
-            startDialogue(this,0);
+            startDialogue(this, 0);
         }
     }
 

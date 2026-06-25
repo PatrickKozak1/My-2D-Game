@@ -1,15 +1,13 @@
 package data;
 
 import main.GamePanel;
-import object.*;
-
-import entity.Entity;
 
 import java.io.*;
 
 public class SaveLoad {
 
     GamePanel gp;
+
     public SaveLoad(GamePanel gp) {
         this.gp = gp;
     }
@@ -56,7 +54,7 @@ public class SaveLoad {
                     if (gp.obj[mapNum][i] == null) {
 
                         ds.mapObjectNames[mapNum][i] = "NA";
-                    }else{
+                    } else {
                         ds.mapObjectNames[mapNum][i] = gp.obj[mapNum][i].name;
                         ds.mapObjectWorldX[mapNum][i] = gp.obj[mapNum][i].worldX;
                         ds.mapObjectWorldY[mapNum][i] = gp.obj[mapNum][i].worldY;
@@ -118,8 +116,7 @@ public class SaveLoad {
 
                     if (ds.mapObjectNames[mapNum][i].equals("NA")) {
                         gp.obj[mapNum][i] = null;
-                    }
-                    else {
+                    } else {
                         gp.obj[mapNum][i] = gp.eGenerator.getObject(ds.mapObjectNames[mapNum][i]);
                         if (gp.obj[mapNum][i] == null) continue;
                         gp.obj[mapNum][i].worldX = ds.mapObjectWorldX[mapNum][i];
@@ -133,10 +130,10 @@ public class SaveLoad {
                         }
                     }
                 }
-                
+
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

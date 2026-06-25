@@ -15,17 +15,18 @@ public class OBJ_BlueHeart extends Entity {
 
         type = type_pickupOnly;
         name = objName;
-        down1 = setup("/objects/blueheart",gp.tileSize,gp.tileSize);
+        down1 = setup("/objects/blueheart", gp.tileSize, gp.tileSize);
 
         setDialogues();
     }
 
-    public void setDialogues(){
+    public void setDialogues() {
 
         dialogues[0][0] = "You pick up a beautiful blue gem.";
         dialogues[0][1] = "You find the Blue Heart, the legendary treasure!";
     }
-    public boolean use(Entity entity){
+
+    public boolean use(Entity entity) {
 
         gp.gameState = gp.cutsceneState;
         gp.csManager.sceneNum = gp.csManager.ending;

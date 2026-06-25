@@ -1,13 +1,12 @@
 package main;
 
-import java.awt.image.BufferedImage;
 import java.io.*;
 
 public class Config {
 
     GamePanel gp;
 
-    public Config(GamePanel gp){
+    public Config(GamePanel gp) {
         this.gp = gp;
     }
 
@@ -40,17 +39,17 @@ public class Config {
         }
     }
 
-    public void loadConfig(){
+    public void loadConfig() {
         try {
             BufferedReader br = new BufferedReader(new FileReader("config.txt"));
 
             String s = br.readLine();
 
             // Full screen
-            if (s.equals("On")){
+            if (s.equals("On")) {
                 gp.fullScreenOn = true;
             }
-            if (s.equals("Off")){
+            if (s.equals("Off")) {
                 gp.fullScreenOn = false;
             }
 

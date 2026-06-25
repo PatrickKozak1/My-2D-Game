@@ -13,7 +13,7 @@ public class Quest {
     public int type;
     public String targetName;
     public int targetCount;
-    public  int currentCount;
+    public int currentCount;
     public boolean accepted = false;
     public boolean completed = false;
     public boolean rewarded = false;
@@ -22,7 +22,7 @@ public class Quest {
     public int rewardCoins = 0;
     public Entity rewardItem = null;
 
-    public Quest (String id, String title, String description, int type, String targetName, int targetCount, int rewardCoins) {
+    public Quest(String id, String title, String description, int type, String targetName, int targetCount, int rewardCoins) {
         this.id = id;
         this.title = title;
         this.description = description;

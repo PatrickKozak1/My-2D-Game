@@ -44,27 +44,28 @@ public class MON_Orc extends Entity {
         getImage();
         getAttackImage();
     }
-    public void getImage(){
 
-        up1 = setup("/monster/orc_up_1",gp.tileSize,gp.tileSize);
-        up2 = setup("/monster/orc_up_2",gp.tileSize,gp.tileSize);
-        down1 = setup("/monster/orc_down_1",gp.tileSize,gp.tileSize);
-        down2 = setup("/monster/orc_down_2",gp.tileSize,gp.tileSize);
-        left1 = setup("/monster/orc_left_1",gp.tileSize,gp.tileSize);
-        left2 = setup("/monster/orc_left_2",gp.tileSize,gp.tileSize);
-        right1 = setup("/monster/orc_right_1",gp.tileSize,gp.tileSize);
-        right2 = setup("/monster/orc_right_2",gp.tileSize,gp.tileSize);
+    public void getImage() {
+
+        up1 = setup("/monster/orc_up_1", gp.tileSize, gp.tileSize);
+        up2 = setup("/monster/orc_up_2", gp.tileSize, gp.tileSize);
+        down1 = setup("/monster/orc_down_1", gp.tileSize, gp.tileSize);
+        down2 = setup("/monster/orc_down_2", gp.tileSize, gp.tileSize);
+        left1 = setup("/monster/orc_left_1", gp.tileSize, gp.tileSize);
+        left2 = setup("/monster/orc_left_2", gp.tileSize, gp.tileSize);
+        right1 = setup("/monster/orc_right_1", gp.tileSize, gp.tileSize);
+        right2 = setup("/monster/orc_right_2", gp.tileSize, gp.tileSize);
     }
 
-    public void getAttackImage(){
-        attackUp1 = setup("/monster/orc_attack_up_1",gp.tileSize,gp.tileSize*2);
-        attackUp2 = setup("/monster/orc_attack_up_2",gp.tileSize,gp.tileSize*2);
-        attackDown1 = setup("/monster/orc_attack_down_1", gp.tileSize,gp.tileSize*2);
-        attackDown2 = setup("/monster/orc_attack_down_2",gp.tileSize,gp.tileSize*2);
-        attackLeft1 = setup("/monster/orc_attack_left_1",gp.tileSize*2,gp.tileSize);
-        attackLeft2 = setup("/monster/orc_attack_left_2",gp.tileSize*2,gp.tileSize);
-        attackRight1 = setup("/monster/orc_attack_right_1",gp.tileSize*2, gp.tileSize);
-        attackRight2 = setup("/monster/orc_attack_right_2",gp.tileSize*2, gp.tileSize);
+    public void getAttackImage() {
+        attackUp1 = setup("/monster/orc_attack_up_1", gp.tileSize, gp.tileSize * 2);
+        attackUp2 = setup("/monster/orc_attack_up_2", gp.tileSize, gp.tileSize * 2);
+        attackDown1 = setup("/monster/orc_attack_down_1", gp.tileSize, gp.tileSize * 2);
+        attackDown2 = setup("/monster/orc_attack_down_2", gp.tileSize, gp.tileSize * 2);
+        attackLeft1 = setup("/monster/orc_attack_left_1", gp.tileSize * 2, gp.tileSize);
+        attackLeft2 = setup("/monster/orc_attack_left_2", gp.tileSize * 2, gp.tileSize);
+        attackRight1 = setup("/monster/orc_attack_right_1", gp.tileSize * 2, gp.tileSize);
+        attackRight2 = setup("/monster/orc_attack_right_2", gp.tileSize * 2, gp.tileSize);
     }
 //    public void setAction(){
 //
@@ -88,49 +89,48 @@ public class MON_Orc extends Entity {
 //        }
 //    }
 
-    public void setAction(){
+    public void setAction() {
 
         int xDistance = Math.abs(worldX - gp.player.worldX);
         int yDistance = Math.abs(worldY - gp.player.worldY);
-        int titleDistance = (xDistance + yDistance)/gp.tileSize;
+        int titleDistance = (xDistance + yDistance) / gp.tileSize;
 
         if (onPath == true) {
 
-            if (titleDistance > 20){
+            if (titleDistance > 20) {
                 onPath = false;
             }
 
-            int goalCol = (gp.player.worldX + gp.player.solidArea.x)/gp.tileSize;
-            int goalRow = (gp.player.worldY + gp.player.solidArea.y)/gp.tileSize;
+            int goalCol = (gp.player.worldX + gp.player.solidArea.x) / gp.tileSize;
+            int goalRow = (gp.player.worldY + gp.player.solidArea.y) / gp.tileSize;
 
-            searchPath(goalCol,goalRow);
+            searchPath(goalCol, goalRow);
 
-        }
-        else{
+        } else {
 
-            if (titleDistance < 5){
+            if (titleDistance < 5) {
 
-                int i = new Random().nextInt(100)+1;
+                int i = new Random().nextInt(100) + 1;
                 if (i > 50) {
                     onPath = true;
                 }
             }
-            actionLockCounter ++;
+            actionLockCounter++;
 
-            if (actionLockCounter == 120){
+            if (actionLockCounter == 120) {
                 Random random = new Random();
-                int i = random.nextInt(100)+1; // pick up a number from 1 to 100
+                int i = random.nextInt(100) + 1; // pick up a number from 1 to 100
 
-                if (i <= 25){
+                if (i <= 25) {
                     direction = "up";
                 }
-                if (i > 25 && i <= 50){
+                if (i > 25 && i <= 50) {
                     direction = "down";
                 }
-                if (i > 50 && i <= 75){
+                if (i > 50 && i <= 75) {
                     direction = "left";
                 }
-                if (i > 75 && i <= 100){
+                if (i > 75 && i <= 100) {
                     direction = "right";
                 }
                 actionLockCounter = 0;
@@ -140,29 +140,30 @@ public class MON_Orc extends Entity {
 
         // Check if it attacks
         if (attacking == false) {
-            checkAttackOrNot(30, gp.tileSize*4, gp.tileSize);
+            checkAttackOrNot(30, gp.tileSize * 4, gp.tileSize);
         }
 
     }
 
-    public void damageReaction(){
+    public void damageReaction() {
         actionLockCounter = 0;
 //        direction = gp.player.direction;
         onPath = true;
     }
-    public void checkDrop(){
+
+    public void checkDrop() {
 
         // CAST A DIE
-        int i = new Random().nextInt(100)+1;
+        int i = new Random().nextInt(100) + 1;
 
         // SET THE MONSTER DROP
-        if (i < 50){
+        if (i < 50) {
             dropItem(new OBJ_Coin_Bronze(gp));
         }
         if (i >= 50 && i < 75) {
             dropItem(new OBJ_Heart(gp));
         }
-        if (i >= 75 && i < 100){
+        if (i >= 75 && i < 100) {
             dropItem(new OBJ_ManaCrystal(gp));
         }
     }

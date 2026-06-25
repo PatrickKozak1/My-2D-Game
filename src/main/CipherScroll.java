@@ -14,11 +14,11 @@ public class CipherScroll {
         this.title = title;
         this.decodedPages = decodedPages;
         this.taughtWords = taughtWords;
-        
+
         this.encodedPages = new String[decodedPages.length];
         for (int i = 0; i < decodedPages.length; i++) {
             this.encodedPages[i] = AncientLanguage.encode(decodedPages[i]);
-            
+
         }
     }
 }

@@ -2,10 +2,6 @@ package object;
 
 import entity.Entity;
 import main.GamePanel;
-import org.ietf.jgss.GSSManager;
-
-import javax.imageio.ImageIO;
-import java.io.IOException;
 
 public class OBJ_Door extends Entity {
 
@@ -19,7 +15,7 @@ public class OBJ_Door extends Entity {
 
         type = type_obstacle;
         name = objName;
-        down1 = setup("/objects/door",gp.tileSize,gp.tileSize);
+        down1 = setup("/objects/door", gp.tileSize, gp.tileSize);
         collision = true;
 
         solidArea.x = 0;
@@ -37,7 +33,7 @@ public class OBJ_Door extends Entity {
 
     public void interact() {
 
-        startDialogue(this,0);
+        startDialogue(this, 0);
 
     }
 

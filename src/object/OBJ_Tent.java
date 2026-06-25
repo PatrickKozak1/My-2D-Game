@@ -15,12 +15,13 @@ public class OBJ_Tent extends Entity {
 
         type = type_consumable;
         name = objName;
-        down1 = setup("/objects/tent",gp.tileSize,gp.tileSize);
+        down1 = setup("/objects/tent", gp.tileSize, gp.tileSize);
         description = "[Tent]\nYou can sleep until\nnext morning.";
         price = 300;
         stackable = true;
     }
-    public boolean use(Entity entity){
+
+    public boolean use(Entity entity) {
 
         gp.gameState = gp.sleepState;
         gp.playSE(18);

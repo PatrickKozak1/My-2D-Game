@@ -3,7 +3,10 @@ package monster;
 import data.Progress;
 import entity.Entity;
 import main.GamePanel;
-import object.*;
+import object.OBJ_Coin_Bronze;
+import object.OBJ_Door_Iron;
+import object.OBJ_Heart;
+import object.OBJ_ManaCrystal;
 
 import java.util.Random;
 
@@ -32,10 +35,10 @@ public class MON_SkeletonLord extends Entity {
         knockBackPower = 5;
         sleep = true;
 
-        int size = gp.tileSize*5;
+        int size = gp.tileSize * 5;
         solidArea.x = 48;
         solidArea.y = 48;
-        solidArea.width = size - 48*2;
+        solidArea.width = size - 48 * 2;
         solidArea.height = size - 48;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
@@ -49,61 +52,62 @@ public class MON_SkeletonLord extends Entity {
         getAttackImage();
         setDialogue();
     }
-    public void getImage(){
+
+    public void getImage() {
 
         int i = 5;
 
         if (inRage == false) {
-            up1 = setup("/monster/skeletonlord_up_1",gp.tileSize*i,gp.tileSize*i);
-            up2 = setup("/monster/skeletonlord_up_2",gp.tileSize*i,gp.tileSize*i);
-            down1 = setup("/monster/skeletonlord_down_1",gp.tileSize*i,gp.tileSize*i);
-            down2 = setup("/monster/skeletonlord_down_2",gp.tileSize*i,gp.tileSize*i);
-            left1 = setup("/monster/skeletonlord_left_1",gp.tileSize*i,gp.tileSize*i);
-            left2 = setup("/monster/skeletonlord_left_2",gp.tileSize*i,gp.tileSize*i);
-            right1 = setup("/monster/skeletonlord_right_1",gp.tileSize*i,gp.tileSize*i);
-            right2 = setup("/monster/skeletonlord_right_2",gp.tileSize*i,gp.tileSize*i);
+            up1 = setup("/monster/skeletonlord_up_1", gp.tileSize * i, gp.tileSize * i);
+            up2 = setup("/monster/skeletonlord_up_2", gp.tileSize * i, gp.tileSize * i);
+            down1 = setup("/monster/skeletonlord_down_1", gp.tileSize * i, gp.tileSize * i);
+            down2 = setup("/monster/skeletonlord_down_2", gp.tileSize * i, gp.tileSize * i);
+            left1 = setup("/monster/skeletonlord_left_1", gp.tileSize * i, gp.tileSize * i);
+            left2 = setup("/monster/skeletonlord_left_2", gp.tileSize * i, gp.tileSize * i);
+            right1 = setup("/monster/skeletonlord_right_1", gp.tileSize * i, gp.tileSize * i);
+            right2 = setup("/monster/skeletonlord_right_2", gp.tileSize * i, gp.tileSize * i);
         }
         if (inRage == true) {
-            up1 = setup("/monster/skeletonlord_phase2_up_1",gp.tileSize*i,gp.tileSize*i);
-            up2 = setup("/monster/skeletonlord_phase2_up_2",gp.tileSize*i,gp.tileSize*i);
-            down1 = setup("/monster/skeletonlord_phase2_down_1",gp.tileSize*i,gp.tileSize*i);
-            down2 = setup("/monster/skeletonlord_phase2_down_2",gp.tileSize*i,gp.tileSize*i);
-            left1 = setup("/monster/skeletonlord_phase2_left_1",gp.tileSize*i,gp.tileSize*i);
-            left2 = setup("/monster/skeletonlord_phase2_left_2",gp.tileSize*i,gp.tileSize*i);
-            right1 = setup("/monster/skeletonlord_phase2_right_1",gp.tileSize*i,gp.tileSize*i);
-            right2 = setup("/monster/skeletonlord_phase2_right_2",gp.tileSize*i,gp.tileSize*i);
+            up1 = setup("/monster/skeletonlord_phase2_up_1", gp.tileSize * i, gp.tileSize * i);
+            up2 = setup("/monster/skeletonlord_phase2_up_2", gp.tileSize * i, gp.tileSize * i);
+            down1 = setup("/monster/skeletonlord_phase2_down_1", gp.tileSize * i, gp.tileSize * i);
+            down2 = setup("/monster/skeletonlord_phase2_down_2", gp.tileSize * i, gp.tileSize * i);
+            left1 = setup("/monster/skeletonlord_phase2_left_1", gp.tileSize * i, gp.tileSize * i);
+            left2 = setup("/monster/skeletonlord_phase2_left_2", gp.tileSize * i, gp.tileSize * i);
+            right1 = setup("/monster/skeletonlord_phase2_right_1", gp.tileSize * i, gp.tileSize * i);
+            right2 = setup("/monster/skeletonlord_phase2_right_2", gp.tileSize * i, gp.tileSize * i);
         }
 
     }
 
-    public void getAttackImage(){
+    public void getAttackImage() {
 
         int i = 5;
 
         if (inRage == false) {
-            attackUp1 = setup("/monster/skeletonlord_attack_up_1",gp.tileSize*i,gp.tileSize*i*2);
-            attackUp2 = setup("/monster/skeletonlord_attack_up_2",gp.tileSize*i,gp.tileSize*i*2);
-            attackDown1 = setup("/monster/skeletonlord_attack_down_1", gp.tileSize*i,gp.tileSize*i*2);
-            attackDown2 = setup("/monster/skeletonlord_attack_down_2",gp.tileSize*i,gp.tileSize*i*2);
-            attackLeft1 = setup("/monster/skeletonlord_attack_left_1",gp.tileSize*i*2,gp.tileSize*i);
-            attackLeft2 = setup("/monster/skeletonlord_attack_left_2",gp.tileSize*i*2,gp.tileSize*i);
-            attackRight1 = setup("/monster/skeletonlord_attack_right_1",gp.tileSize*i*2, gp.tileSize*i);
-            attackRight2 = setup("/monster/skeletonlord_attack_right_2",gp.tileSize*i*2, gp.tileSize*i);
+            attackUp1 = setup("/monster/skeletonlord_attack_up_1", gp.tileSize * i, gp.tileSize * i * 2);
+            attackUp2 = setup("/monster/skeletonlord_attack_up_2", gp.tileSize * i, gp.tileSize * i * 2);
+            attackDown1 = setup("/monster/skeletonlord_attack_down_1", gp.tileSize * i, gp.tileSize * i * 2);
+            attackDown2 = setup("/monster/skeletonlord_attack_down_2", gp.tileSize * i, gp.tileSize * i * 2);
+            attackLeft1 = setup("/monster/skeletonlord_attack_left_1", gp.tileSize * i * 2, gp.tileSize * i);
+            attackLeft2 = setup("/monster/skeletonlord_attack_left_2", gp.tileSize * i * 2, gp.tileSize * i);
+            attackRight1 = setup("/monster/skeletonlord_attack_right_1", gp.tileSize * i * 2, gp.tileSize * i);
+            attackRight2 = setup("/monster/skeletonlord_attack_right_2", gp.tileSize * i * 2, gp.tileSize * i);
         }
         if (inRage == true) {
-            attackUp1 = setup("/monster/skeletonlord_phase2_attack_up_1",gp.tileSize*i,gp.tileSize*i*2);
-            attackUp2 = setup("/monster/skeletonlord_phase2_attack_up_2",gp.tileSize*i,gp.tileSize*i*2);
-            attackDown1 = setup("/monster/skeletonlord_phase2_attack_down_1", gp.tileSize*i,gp.tileSize*i*2);
-            attackDown2 = setup("/monster/skeletonlord_phase2_attack_down_2",gp.tileSize*i,gp.tileSize*i*2);
-            attackLeft1 = setup("/monster/skeletonlord_phase2_attack_left_1",gp.tileSize*i*2,gp.tileSize*i);
-            attackLeft2 = setup("/monster/skeletonlord_phase2_attack_left_2",gp.tileSize*i*2,gp.tileSize*i);
-            attackRight1 = setup("/monster/skeletonlord_phase2_attack_right_1",gp.tileSize*i*2, gp.tileSize*i);
-            attackRight2 = setup("/monster/skeletonlord_phase2_attack_right_2",gp.tileSize*i*2, gp.tileSize*i);
+            attackUp1 = setup("/monster/skeletonlord_phase2_attack_up_1", gp.tileSize * i, gp.tileSize * i * 2);
+            attackUp2 = setup("/monster/skeletonlord_phase2_attack_up_2", gp.tileSize * i, gp.tileSize * i * 2);
+            attackDown1 = setup("/monster/skeletonlord_phase2_attack_down_1", gp.tileSize * i, gp.tileSize * i * 2);
+            attackDown2 = setup("/monster/skeletonlord_phase2_attack_down_2", gp.tileSize * i, gp.tileSize * i * 2);
+            attackLeft1 = setup("/monster/skeletonlord_phase2_attack_left_1", gp.tileSize * i * 2, gp.tileSize * i);
+            attackLeft2 = setup("/monster/skeletonlord_phase2_attack_left_2", gp.tileSize * i * 2, gp.tileSize * i);
+            attackRight1 = setup("/monster/skeletonlord_phase2_attack_right_1", gp.tileSize * i * 2, gp.tileSize * i);
+            attackRight2 = setup("/monster/skeletonlord_phase2_attack_right_2", gp.tileSize * i * 2, gp.tileSize * i);
         }
 
     }
 
-    public void setDialogue(){
+    public void setDialogue() {
 
         dialogues[0][0] = "No one can steal my treasure!";
         dialogues[0][1] = "You will die here!";
@@ -133,13 +137,13 @@ public class MON_SkeletonLord extends Entity {
 //        }
 //    }
 
-    public void setAction(){
+    public void setAction() {
 
         int xDistance = Math.abs(worldX - gp.player.worldX);
         int yDistance = Math.abs(worldY - gp.player.worldY);
-        int titleDistance = (xDistance + yDistance)/gp.tileSize;
+        int titleDistance = (xDistance + yDistance) / gp.tileSize;
 
-        if (inRage == false && life < maxLife/2){
+        if (inRage == false && life < maxLife / 2) {
             inRage = true;
             getImage();
             getAttackImage();
@@ -151,25 +155,24 @@ public class MON_SkeletonLord extends Entity {
         if (getTileDistance(gp.player) < 10) {
 
             moveTowardPlayer(60);
-        }
-        else{
+        } else {
 
-            actionLockCounter ++;
+            actionLockCounter++;
 
-            if (actionLockCounter == 120){
+            if (actionLockCounter == 120) {
                 Random random = new Random();
-                int i = random.nextInt(100)+1; // pick up a number from 1 to 100
+                int i = random.nextInt(100) + 1; // pick up a number from 1 to 100
 
-                if (i <= 25){
+                if (i <= 25) {
                     direction = "up";
                 }
-                if (i > 25 && i <= 50){
+                if (i > 25 && i <= 50) {
                     direction = "down";
                 }
-                if (i > 50 && i <= 75){
+                if (i > 50 && i <= 75) {
                     direction = "left";
                 }
-                if (i > 75 && i <= 100){
+                if (i > 75 && i <= 100) {
                     direction = "right";
                 }
                 actionLockCounter = 0;
@@ -179,16 +182,17 @@ public class MON_SkeletonLord extends Entity {
 
         // Check if it attacks
         if (attacking == false) {
-            checkAttackOrNot(60, gp.tileSize*10, gp.tileSize*5);
+            checkAttackOrNot(60, gp.tileSize * 10, gp.tileSize * 5);
         }
 
     }
 
-    public void damageReaction(){
+    public void damageReaction() {
         actionLockCounter = 0;
 
     }
-    public void checkDrop(){
+
+    public void checkDrop() {
 
         gp.bossBattleOn = false;
         Progress.skeletonLordDefeated = true;
@@ -196,28 +200,28 @@ public class MON_SkeletonLord extends Entity {
         // Restore the previous music
         gp.stopMusic();
         gp.playMusic(8);
-        
+
         // Remove the iron doors
 
-            for (int i = 0; i < gp.obj[gp.currentMap].length; i++) {
-                if (gp.obj[gp.currentMap][i] != null && gp.obj[gp.currentMap][i].name.equals(OBJ_Door_Iron.objName)) {
-                    gp.playSE(7);
-                    gp.obj[gp.currentMap][i] = null;
-                }
+        for (int i = 0; i < gp.obj[gp.currentMap].length; i++) {
+            if (gp.obj[gp.currentMap][i] != null && gp.obj[gp.currentMap][i].name.equals(OBJ_Door_Iron.objName)) {
+                gp.playSE(7);
+                gp.obj[gp.currentMap][i] = null;
             }
+        }
 
 
         // CAST A DIE
-        int i = new Random().nextInt(100)+1;
+        int i = new Random().nextInt(100) + 1;
 
         // SET THE MONSTER DROP
-        if (i < 50){
+        if (i < 50) {
             dropItem(new OBJ_Coin_Bronze(gp));
         }
         if (i >= 50 && i < 75) {
             dropItem(new OBJ_Heart(gp));
         }
-        if (i >= 75 && i < 100){
+        if (i >= 75 && i < 100) {
             dropItem(new OBJ_ManaCrystal(gp));
         }
     }

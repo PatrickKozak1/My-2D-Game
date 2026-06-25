@@ -20,7 +20,7 @@ public class Main {
         window.add(gamePanel);
 
         gamePanel.config.loadConfig();
-        if (gamePanel.fullScreenOn == true){
+        if (gamePanel.fullScreenOn == true) {
             window.setUndecorated(true);
         }
 
@@ -33,7 +33,7 @@ public class Main {
         gamePanel.startGameThread();
     }
 
-    public void setIcon(){
+    public void setIcon() {
 
         ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("player/boy_down_1.png"));
         window.setIconImage(icon.getImage());

@@ -10,7 +10,7 @@ public class IT_DryTree extends InteractiveTile {
     GamePanel gp;
 
     public IT_DryTree(GamePanel gp, int col, int row) {
-        super(gp,col,row);
+        super(gp, col, row);
         this.gp = gp;
 
         this.worldX = gp.tileSize * col;
@@ -18,20 +18,20 @@ public class IT_DryTree extends InteractiveTile {
 
         down1 = setup("/tiles_interactivess/drytree", gp.tileSize, gp.tileSize);
         destructible = true;
-        life =  3;
+        life = 3;
     }
 
-    public void playSE(){
+    public void playSE() {
         gp.playSE(6);
     }
 
-    public InteractiveTile getDestroyFrom(){
-        InteractiveTile tile =  new IT_Trunk(gp,worldX/gp.tileSize, worldY/gp.tileSize);
+    public InteractiveTile getDestroyFrom() {
+        InteractiveTile tile = new IT_Trunk(gp, worldX / gp.tileSize, worldY / gp.tileSize);
         return tile;
     }
 
-    public Color getParticleColor () {
-        Color color = new Color(65,50,30);
+    public Color getParticleColor() {
+        Color color = new Color(65, 50, 30);
         return color;
     }
 
@@ -40,19 +40,20 @@ public class IT_DryTree extends InteractiveTile {
         return size;
     }
 
-    public int getParticleSpeed(){
+    public int getParticleSpeed() {
         int speed = 1;
         return speed;
     }
-    public int getParticleMaxLife(){
+
+    public int getParticleMaxLife() {
         int maxLife = 20;
         return maxLife;
     }
 
-    public boolean isCorrectItem(Entity entity){
+    public boolean isCorrectItem(Entity entity) {
         boolean isCorrectItem = false;
 
-        if (entity.currentWeapon.type == type_axe){
+        if (entity.currentWeapon.type == type_axe) {
             isCorrectItem = true;
         }
 

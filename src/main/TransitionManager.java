@@ -1,19 +1,19 @@
 package main;
 
 import java.awt.*;
-import java.lang.management.ManagementFactory;
 
 public class TransitionManager {
 
     GamePanel gp;
 
-    public enum Phase{IDLE, FADE_OUT, FADE_IN}
+    public enum Phase {IDLE, FADE_OUT, FADE_IN}
+
     public Phase phase = Phase.IDLE;
     private float alpha = 0f;
     private float speed = 0.05f;
     private Runnable onMidPoint;
 
-    public TransitionManager (GamePanel gp) {
+    public TransitionManager(GamePanel gp) {
         this.gp = gp;
     }
 
@@ -21,7 +21,7 @@ public class TransitionManager {
         trigger(0.05f, onMidpoint);
     }
 
-    public void trigger(float speed, Runnable onMidPoint){
+    public void trigger(float speed, Runnable onMidPoint) {
         if (phase != Phase.IDLE) return;
         this.speed = speed;
         this.onMidPoint = onMidPoint;
@@ -34,12 +34,18 @@ public class TransitionManager {
             alpha += speed;
             if (alpha >= 1f) {
                 alpha = 1f;
-                if (onMidPoint != null) {onMidPoint.run(); onMidPoint = null;}
+                if (onMidPoint != null) {
+                    onMidPoint.run();
+                    onMidPoint = null;
+                }
                 phase = Phase.FADE_IN;
             }
-        }else if (phase == Phase.FADE_IN) {
+        } else if (phase == Phase.FADE_IN) {
             alpha -= speed;
-            if (alpha <= 0f) {alpha = 0f; phase = Phase.IDLE;}
+            if (alpha <= 0f) {
+                alpha = 0f;
+                phase = Phase.IDLE;
+            }
         }
     }
 
@@ -52,6 +58,8 @@ public class TransitionManager {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
 
-    public boolean isActive() { return phase != Phase.IDLE; }
+    public boolean isActive() {
+        return phase != Phase.IDLE;
+    }
 
 }

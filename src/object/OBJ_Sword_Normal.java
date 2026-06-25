@@ -11,12 +11,12 @@ public class OBJ_Sword_Normal extends Entity {
         super(gp);
 
         type = type_sword;
-        name =  objName;
-        down1 = setup("/objects/sword_normal",gp.tileSize,gp.tileSize);
+        name = objName;
+        down1 = setup("/objects/sword_normal", gp.tileSize, gp.tileSize);
         attackValue = 1;
         description = "[" + name + "]\nAn old Sword";
         attackArea.width = 36;
-        attackArea.height  = 36;
+        attackArea.height = 36;
         price = 20;
         knockBackPower = 2;
         motion1_duration = 5;

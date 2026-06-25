@@ -1,6 +1,7 @@
 package main;
 
 import entity.Entity;
+
 import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
@@ -115,7 +116,7 @@ public class TutorialManager {
                 break;
         }
     }
-    
+
     public void triggerInventoryTutorial() {
         if (!inventoryTutorialShown) {
             inventoryTutorialShown = true;
@@ -216,7 +217,7 @@ public class TutorialManager {
     }
 
     // Skip Tutorials
-   public void skippAll(){
+    public void skippAll() {
         phase = 0;
         inventoryTutorialActive = false;
         inventoryTutorialShown = true;
@@ -225,7 +226,7 @@ public class TutorialManager {
         tutorialItem = null;
         fadeAlpha = 0f;
         gp.gameState = gp.playState;
-   }
+    }
 
     public void draw(Graphics2D g2) {
         this.g2 = g2;
@@ -334,7 +335,7 @@ public class TutorialManager {
         // Card-Fenster
         int cardW = gp.tileSize * 9;
         int cardH = gp.tileSize * 7;
-        int cardX = gp.screenWidth  / 2 - cardW / 2;
+        int cardX = gp.screenWidth / 2 - cardW / 2;
         int cardY = gp.screenHeight / 2 - cardH / 2;
 
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, fadeAlpha));

@@ -7,9 +7,8 @@ import tile_interactive.InteractiveTile;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Random;
 
-public class NPC_BigRock extends Entity{
+public class NPC_BigRock extends Entity {
 
     public static final String npcName = "Big Rock";
 
@@ -33,32 +32,35 @@ public class NPC_BigRock extends Entity{
         getImage();
         setDialogue();
     }
-    public void getImage(){
-        up1 = setup("/npc/bigrock",gp.tileSize,gp.tileSize);
-        up2 = setup("/npc/bigrock",gp.tileSize,gp.tileSize);
-        down1 = setup("/npc/bigrock",gp.tileSize,gp.tileSize);
-        down2 = setup("/npc/bigrock",gp.tileSize,gp.tileSize);
-        left1 = setup("/npc/bigrock",gp.tileSize,gp.tileSize);
-        left2 = setup("/npc/bigrock",gp.tileSize,gp.tileSize);
-        right1 = setup("/npc/bigrock",gp.tileSize,gp.tileSize);
-        right2 = setup("/npc/bigrock",gp.tileSize,gp.tileSize);
+
+    public void getImage() {
+        up1 = setup("/npc/bigrock", gp.tileSize, gp.tileSize);
+        up2 = setup("/npc/bigrock", gp.tileSize, gp.tileSize);
+        down1 = setup("/npc/bigrock", gp.tileSize, gp.tileSize);
+        down2 = setup("/npc/bigrock", gp.tileSize, gp.tileSize);
+        left1 = setup("/npc/bigrock", gp.tileSize, gp.tileSize);
+        left2 = setup("/npc/bigrock", gp.tileSize, gp.tileSize);
+        right1 = setup("/npc/bigrock", gp.tileSize, gp.tileSize);
+        right2 = setup("/npc/bigrock", gp.tileSize, gp.tileSize);
 
     }
 
-    public void setDialogue(){
+    public void setDialogue() {
         dialogues[0][0] = "It's a giant rock";
     }
 
-    public void setAction(){}
+    public void setAction() {
+    }
 
-    public void update(){}
+    public void update() {
+    }
 
-    public void speak(){
+    public void speak() {
 
         // Do this charakter specific stuff
 
         facePlayer();
-        startDialogue(this,dialogueSet);
+        startDialogue(this, dialogueSet);
 
         dialogueSet++;
 
@@ -69,7 +71,7 @@ public class NPC_BigRock extends Entity{
 
     }
 
-    public void  move(String d){
+    public void move(String d) {
         this.direction = d;
 
         checkCollision();
@@ -77,15 +79,24 @@ public class NPC_BigRock extends Entity{
         if (collisionON == false) {
 
             switch (direction) {
-                case "up": worldY -= speed;break;
-                case "down": worldY += speed; break;
-                case "left": worldX -= speed;break;
-                case "right": worldX += speed;break;
+                case "up":
+                    worldY -= speed;
+                    break;
+                case "down":
+                    worldY += speed;
+                    break;
+                case "left":
+                    worldX -= speed;
+                    break;
+                case "right":
+                    worldX += speed;
+                    break;
             }
         }
         detectPlate();
     }
-    public void detectPlate(){
+
+    public void detectPlate() {
 
         ArrayList<InteractiveTile> plateList = new ArrayList<>();
         ArrayList<Entity> rockList = new ArrayList<>();
@@ -116,7 +127,7 @@ public class NPC_BigRock extends Entity{
 
             int xDistance = Math.abs(worldX - plateList.get(i).worldX);
             int yDistance = Math.abs(worldY - plateList.get(i).worldY);
-            int distance = Math.max(xDistance,yDistance);
+            int distance = Math.max(xDistance, yDistance);
 
             if (distance < 8) {
 
@@ -124,9 +135,7 @@ public class NPC_BigRock extends Entity{
                     linkedEntity = plateList.get(i);
                     gp.playSE(21);
                 }
-            }
-
-            else {
+            } else {
                 if (linkedEntity == plateList.get(i)) {
                     linkedEntity = null;
                 }

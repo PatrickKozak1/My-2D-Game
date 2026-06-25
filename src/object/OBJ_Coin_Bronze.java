@@ -14,12 +14,12 @@ public class OBJ_Coin_Bronze extends Entity {
         this.gp = gp;
 
         type = type_pickupOnly;
-        name = objName ;
+        name = objName;
         value = 1;
-        down1 = setup("/objects/coin_bronze",gp.tileSize,gp.tileSize);
+        down1 = setup("/objects/coin_bronze", gp.tileSize, gp.tileSize);
     }
 
-    public boolean use (Entity entity){
+    public boolean use(Entity entity) {
         gp.playSE(4);
         gp.ui.addMessage("Con +" + value);
         gp.player.coin += value;

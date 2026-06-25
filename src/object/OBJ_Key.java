@@ -15,7 +15,7 @@ public class OBJ_Key extends Entity {
 
         type = type_consumable;
         name = objName;
-        down1 = setup("/objects/key",gp.tileSize,gp.tileSize);
+        down1 = setup("/objects/key", gp.tileSize, gp.tileSize);
         description = "[" + name + "]\nIt opens a door";
         price = 150;
         stackable = true;
@@ -30,17 +30,17 @@ public class OBJ_Key extends Entity {
         dialogues[1][0] = "What are you doing?";
     }
 
-    public boolean use(Entity entity){
+    public boolean use(Entity entity) {
 
         int objIndex = getDetected(entity, gp.obj, "Door");
 
         if (objIndex != 999) {
-            startDialogue(this,0);
+            startDialogue(this, 0);
             gp.playSE(21);
             gp.obj[gp.currentMap][objIndex] = null;
             return true;
-        }else {
-            startDialogue(this,1);
+        } else {
+            startDialogue(this, 1);
             return false;
         }
 

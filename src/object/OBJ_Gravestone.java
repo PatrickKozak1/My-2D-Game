@@ -31,14 +31,14 @@ public class OBJ_Gravestone extends Entity {
 
         solidArea.x = 4;
         solidArea.y = 16;
-        solidArea.width = gp.tileSize -8;
-        solidArea.height = gp.tileSize -20;
-        solidAreaDefaultX  = solidArea.x;
-        solidAreaDefaultY  = solidArea.y;
+        solidArea.width = gp.tileSize - 8;
+        solidArea.height = gp.tileSize - 20;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
     }
 
     @Override
-    public void interact(){
+    public void interact() {
         if (storedItems.isEmpty()) {
             gp.ui.addMessage("The gravestone is empty.");
             return;
@@ -48,10 +48,10 @@ public class OBJ_Gravestone extends Entity {
         int returned = 0;
 
         for (Entity item : storedItems) {
-            if (gp.player.inventory.size() < gp.player.maxInventorySize){
+            if (gp.player.inventory.size() < gp.player.maxInventorySize) {
                 gp.player.inventory.add(item);
                 returned++;
-            }else {
+            } else {
                 remaining.add(item);
             }
         }
@@ -70,13 +70,13 @@ public class OBJ_Gravestone extends Entity {
                     break;
                 }
             }
-        }else {
+        } else {
             gp.ui.addMessage(storedItems.size() + " items left - inventory full!");
         }
     }
 
     @Override
-    public void draw(Graphics2D g2){
+    public void draw(Graphics2D g2) {
         if (!inCamera()) return;
 
         pulseCounter++;
@@ -87,41 +87,41 @@ public class OBJ_Gravestone extends Entity {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, pulse));
         g2.setColor(new Color(150, 80, 255));
         g2.fillOval(sx + gp.tileSize / 2 - 14, sy - 6, 28, 28);
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1f));
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
         BufferedImage img = (pulseCounter % 60 < 30) ? down1 : down2;
-        g2.drawImage(img,sx,sy, null);
+        g2.drawImage(img, sx, sy, null);
 
         if (!storedItems.isEmpty()) {
             g2.setFont(new Font("Arial", Font.BOLD, 11));
-            g2.setColor(new Color(255,215,0));
+            g2.setColor(new Color(255, 215, 0));
             g2.drawString(storedItems.size() + " items", sx + 2, sy + gp.tileSize - 2);
         }
     }
 
     private BufferedImage generateSprite(boolean glow) {
         int s = gp.tileSize;
-        BufferedImage img = new BufferedImage(s,s, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage img = new BufferedImage(s, s, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = img.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         if (glow) {
-            g.setColor(new Color(150, 80,255,50));
+            g.setColor(new Color(150, 80, 255, 50));
         }
 
-        g.setColor(new Color(70,70,75));
-        g.fillRoundRect(s / 2 - 13, s - 11, 26,7,4,4);
+        g.setColor(new Color(70, 70, 75));
+        g.fillRoundRect(s / 2 - 13, s - 11, 26, 7, 4, 4);
         g.setColor(new Color(40, 40, 45));
         g.setStroke(new BasicStroke(1f));
-        g.drawRoundRect(s / 2 - 13, s - 11, 26,7,4,4);
+        g.drawRoundRect(s / 2 - 13, s - 11, 26, 7, 4, 4);
 
-        g.setColor(new Color(110,110,120));
+        g.setColor(new Color(110, 110, 120));
         g.fillRoundRect(s / 2 - 11, 10, 22, s - 20, 10, 10);
 
-        g.setColor(new Color(150,150,165,140));
+        g.setColor(new Color(150, 150, 165, 140));
         g.fillRoundRect(s / 2 - 9, 13, 7, s - 26, 4, 4);
 
-        g.setColor(new Color(55,55,65));
+        g.setColor(new Color(55, 55, 65));
         g.setStroke(new BasicStroke(1.5f));
         g.drawRoundRect(s / 2 - 11, 10, 22, s - 20, 10, 10);
 
@@ -130,13 +130,13 @@ public class OBJ_Gravestone extends Entity {
         FontMetrics fm = g.getFontMetrics();
         g.drawString("RIP", s / 2 - fm.stringWidth("RIP") / 2, 24);
 
-        g.setColor(new Color(65,65,75));
+        g.setColor(new Color(65, 65, 75));
         g.setStroke(new BasicStroke(2f));
         g.drawLine(s / 2, 28, s / 2, s - 18);
         g.drawLine(s / 2 - 7, 34, s / 2 + 7, 34);
 
         if (glow) {
-            g.setColor(new Color(180,130,255,140));
+            g.setColor(new Color(180, 130, 255, 140));
             g.fillOval(s / 2 - 3, 2, 6, 6);
             g.fillOval(s / 2 + 7, 6, 4, 4);
             g.fillOval(s / 2 - 11, 5, 4, 4);

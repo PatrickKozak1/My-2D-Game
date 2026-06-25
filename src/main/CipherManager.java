@@ -10,20 +10,20 @@ public class CipherManager {
 
     GamePanel gp;
 
-    public List<CipherScroll> scrolls    = new ArrayList<>();
-    public Set<String>        knownWords = new HashSet<>();
+    public List<CipherScroll> scrolls = new ArrayList<>();
+    public Set<String> knownWords = new HashSet<>();
 
-    public boolean      reading       = false;
+    public boolean reading = false;
     private CipherScroll currentScroll = null;
-    private int         currentPage   = 0;
-    private boolean     showDecoded   = false;
+    private int currentPage = 0;
+    private boolean showDecoded = false;
 
-    public boolean decoderOpen         = false;
-    public int     decoderTab          = 0;
-    public int     selectedScrollIndex = 0;
+    public boolean decoderOpen = false;
+    public int decoderTab = 0;
+    public int selectedScrollIndex = 0;
 
-    private float fadeAlpha   = 0f;
-    private int   glowCounter = 0;
+    private float fadeAlpha = 0f;
+    private int glowCounter = 0;
 
     public CipherManager(GamePanel gp) {
         this.gp = gp;
@@ -87,7 +87,10 @@ public class CipherManager {
 
     public void openScroll(String id) {
         CipherScroll scroll = getScroll(id);
-        if (scroll == null) return;
+        if (scroll == null) {
+            System.out.println("Scroll nicht gefunden: " + id);
+            return;
+        }
 
         if (!scroll.collected) {
             scroll.collected = true;
@@ -99,28 +102,28 @@ public class CipherManager {
         }
 
         currentScroll = scroll;
-        currentPage   = 0;
-        showDecoded   = false;
-        fadeAlpha     = 0f;
-        reading       = true;
-        decoderOpen   = false;
-        gp.gameState  = gp.cipherState;
+        currentPage = 0;
+        showDecoded = false;
+        fadeAlpha = 0f;
+        reading = true;
+        decoderOpen = false;
+        gp.gameState = gp.cipherState;
     }
 
     public void openDecoder() {
-        decoderOpen  = true;
-        reading      = false;
-        fadeAlpha    = 0f;
+        decoderOpen = true;
+        reading = false;
+        fadeAlpha = 0f;
         gp.gameState = gp.cipherState;
     }
 
     public void readAgain(CipherScroll scroll) {
         currentScroll = scroll;
-        currentPage   = 0;
-        showDecoded   = false;
-        fadeAlpha     = 0f;
-        reading       = true;
-        decoderOpen   = false;
+        currentPage = 0;
+        showDecoded = false;
+        fadeAlpha = 0f;
+        reading = true;
+        decoderOpen = false;
     }
 
     public void nextPage() {
@@ -136,18 +139,18 @@ public class CipherManager {
 
     public void toggleDecode() {
         showDecoded = !showDecoded;
-        fadeAlpha   = 0f;
+        fadeAlpha = 0f;
     }
 
     public void close() {
-        reading          = false;
-        decoderOpen      = false;
-        currentScroll    = null;
-        currentPage      = 0;
-        showDecoded      = false;
-        decoderTab       = 0;
+        reading = false;
+        decoderOpen = false;
+        currentScroll = null;
+        currentPage = 0;
+        showDecoded = false;
+        decoderTab = 0;
         selectedScrollIndex = 0;
-        gp.gameState     = gp.playState;
+        gp.gameState = gp.playState;
     }
 
     public int getCollectedCount() {
@@ -157,7 +160,10 @@ public class CipherManager {
     }
 
     public void update() {
-        if (fadeAlpha < 1f) { fadeAlpha += 0.05f; if (fadeAlpha > 1f) fadeAlpha = 1f; }
+        if (fadeAlpha < 1f) {
+            fadeAlpha += 0.05f;
+            if (fadeAlpha > 1f) fadeAlpha = 1f;
+        }
         glowCounter++;
     }
 
@@ -177,7 +183,7 @@ public class CipherManager {
     private void drawScrollScreen(Graphics2D g2) {
         int pW = gp.tileSize * 12;
         int pH = gp.tileSize * 10;
-        int pX = gp.screenWidth  / 2 - pW / 2;
+        int pX = gp.screenWidth / 2 - pW / 2;
         int pY = gp.screenHeight / 2 - pH / 2;
 
         drawAncientParchment(g2, pX, pY, pW, pH);
@@ -196,9 +202,9 @@ public class CipherManager {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, fadeAlpha));
 
         if (!showDecoded) {
-            float glow = 0.6f + 0.4f * (float)(Math.sin(glowCounter * 0.04));
+            float glow = 0.6f + 0.4f * (float) (Math.sin(glowCounter * 0.04));
             g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 20f));
-            g2.setColor(new Color(120, 60, 20, (int)(glow * 180)));
+            g2.setColor(new Color(120, 60, 20, (int) (glow * 180)));
             drawWrappedText(g2, pageText, pX + 32, pY + 80, pW - 64, 32);
             g2.setColor(new Color(60, 25, 8));
             drawWrappedText(g2, pageText, pX + 30, pY + 78, pW - 64, 32);
@@ -226,7 +232,7 @@ public class CipherManager {
         String decodeHint = showDecoded ? "[ T ] Hide Translation" : "[ T ] Translate Known";
         g2.drawString(decodeHint, pX + 20, pY + pH - 28);
 
-        boolean isLast  = currentPage >= currentScroll.encodedPages.length - 1;
+        boolean isLast = currentPage >= currentScroll.encodedPages.length - 1;
         String nextHint = isLast ? "[ ENTER ] Close" : "[ ENTER ] Next Page";
         int nhW = g2.getFontMetrics().stringWidth(nextHint);
         g2.drawString(nextHint, pX + pW - nhW - 20, pY + pH - 28);
@@ -238,7 +244,7 @@ public class CipherManager {
     private void drawDecoderScreen(Graphics2D g2) {
         int pW = gp.tileSize * 14;
         int pH = gp.tileSize * 10;
-        int pX = gp.screenWidth  / 2 - pW / 2;
+        int pX = gp.screenWidth / 2 - pW / 2;
         int pY = gp.screenHeight / 2 - pH / 2;
 
         drawAncientParchment(g2, pX, pY, pW, pH);
@@ -291,11 +297,11 @@ public class CipherManager {
             return;
         }
 
-        int col1X  = pX + 30;
-        int col2X  = pX + pW / 2 + 20;
+        int col1X = pX + 30;
+        int col2X = pX + pW / 2 + 20;
         int startY = pY + 100;
-        int lineH  = 30;
-        int row    = 0;
+        int lineH = 30;
+        int row = 0;
 
         g2.setFont(gp.ui.purisaB.deriveFont(Font.BOLD, 16f));
         g2.setColor(new Color(120, 70, 30));
@@ -307,12 +313,12 @@ public class CipherManager {
 
         for (String word : sorted) {
             String encoded = AncientLanguage.encode(word);
-            int    cx      = (row % 2 == 0) ? col1X : col2X;
-            int    cy      = startY + (row / 2) * lineH;
+            int cx = (row % 2 == 0) ? col1X : col2X;
+            int cy = startY + (row / 2) * lineH;
 
-            float glow = 0.5f + 0.3f * (float)(Math.sin(glowCounter * 0.03 + row));
+            float glow = 0.5f + 0.3f * (float) (Math.sin(glowCounter * 0.03 + row));
             g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 18f));
-            g2.setColor(new Color(120, 60, 20, (int)(glow * 200)));
+            g2.setColor(new Color(120, 60, 20, (int) (glow * 200)));
             g2.drawString(encoded, cx, cy);
             g2.setColor(new Color(60, 25, 8));
             g2.drawString(encoded, cx - 1, cy - 1);
@@ -390,9 +396,9 @@ public class CipherManager {
         FontMetrics fm = g2.getFontMetrics();
 
         for (String word : words) {
-            String  decoded = AncientLanguage.decode(word);
-            boolean known   = knownWords.contains(decoded.toLowerCase().replaceAll("[^a-z]", ""));
-            String  display = known ? decoded : word;
+            String decoded = AncientLanguage.decode(word);
+            boolean known = knownWords.contains(decoded.toLowerCase().replaceAll("[^a-z]", ""));
+            String display = known ? decoded : word;
 
             if (currX + fm.stringWidth(display) > x + maxW) {
                 currX = x;
@@ -403,9 +409,9 @@ public class CipherManager {
                 g2.setFont(gp.ui.purisaB.deriveFont(Font.BOLD, 20f));
                 g2.setColor(new Color(40, 20, 5));
             } else {
-                float glow = 0.5f + 0.4f * (float)(Math.sin(glowCounter * 0.04));
+                float glow = 0.5f + 0.4f * (float) (Math.sin(glowCounter * 0.04));
                 g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 20f));
-                g2.setColor(new Color(120, 60, 20, (int)(glow * 180)));
+                g2.setColor(new Color(120, 60, 20, (int) (glow * 180)));
             }
             g2.drawString(display + " ", currX, currY);
             currX += fm.stringWidth(display + " ");
@@ -437,7 +443,7 @@ public class CipherManager {
         g2.fillRoundRect(x, y, w, h / 3, 16, 16);
         g2.fillRoundRect(x, y + h * 2 / 3, w, h / 3, 16, 16);
 
-        float shimmer = 0.04f + 0.02f * (float)(Math.sin(glowCounter * 0.03));
+        float shimmer = 0.04f + 0.02f * (float) (Math.sin(glowCounter * 0.03));
         shimmer = Math.max(0f, Math.min(1f, shimmer));
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, shimmer));
         g2.setColor(new Color(100, 50, 200));
@@ -452,10 +458,10 @@ public class CipherManager {
         g2.setStroke(new BasicStroke(1f));
         g2.drawRoundRect(x + 10, y + 10, w - 20, h - 20, 10, 10);
 
-        drawCornerOrnament(g2, x + 10,      y + 10);
-        drawCornerOrnament(g2, x + w - 22,  y + 10);
-        drawCornerOrnament(g2, x + 10,      y + h - 22);
-        drawCornerOrnament(g2, x + w - 22,  y + h - 22);
+        drawCornerOrnament(g2, x + 10, y + 10);
+        drawCornerOrnament(g2, x + w - 22, y + 10);
+        drawCornerOrnament(g2, x + 10, y + h - 22);
+        drawCornerOrnament(g2, x + w - 22, y + h - 22);
     }
 
     private void drawCornerOrnament(Graphics2D g2, int x, int y) {
@@ -467,13 +473,13 @@ public class CipherManager {
 
     private void drawWrappedText(Graphics2D g2, String text, int x, int y,
                                  int maxWidth, int lineHeight) {
-        FontMetrics fm      = g2.getFontMetrics();
-        String[]    paragraphs = text.split("\n");
-        int         currentY   = y;
+        FontMetrics fm = g2.getFontMetrics();
+        String[] paragraphs = text.split("\n");
+        int currentY = y;
 
         for (String paragraph : paragraphs) {
-            String[]      words = paragraph.split(" ");
-            StringBuilder line  = new StringBuilder();
+            String[] words = paragraph.split(" ");
+            StringBuilder line = new StringBuilder();
 
             for (String word : words) {
                 String test = line.length() > 0 ? line + " " + word : word;

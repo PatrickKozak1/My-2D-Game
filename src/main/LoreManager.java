@@ -237,6 +237,8 @@ public class LoreManager {
             LoreNote note = collectedNotes.get(i);
             boolean selected = (i == journalIndex);
 
+            if (entryY > listY + listH - 40) break;
+
             if (selected) {
                 g2.setColor(new Color(180, 120, 60, 100));
                 g2.fillRoundRect(listX + 12, entryY - 18, listW - 24, 28, 6, 6);
@@ -248,7 +250,6 @@ public class LoreManager {
             g2.drawString(note.title, listX + 36, entryY);
             entryY += 36;
         }
-
         g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 15f));
         g2.setColor(new Color(140, 90, 40));
         g2.drawString("[ ENTER ] Read   [ ESC ] Close", listX + 16, listY + listH - 14);

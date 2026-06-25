@@ -321,7 +321,7 @@ public class KeyHandler implements KeyListener {
             gp.loreManager.openJournal();
         }
         // N = Decoder öffnen (D war Kollision mit Bewegung)
-        if (code == KeyEvent.VK_N && gp.cipherManager.getCollectedCount() > 0) {
+        if (code == KeyEvent.VK_N) {
             gp.cipherManager.openDecoder();
         }
 

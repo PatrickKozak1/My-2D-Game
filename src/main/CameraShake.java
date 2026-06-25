@@ -15,19 +15,21 @@ public class CameraShake {
         if (intensity > this.intensity) this.intensity = intensity;
     }
 
-    public  void update() {
+    public void update() {
         if (duration > 0) {
             float fade = Math.min(1f, (float) duration / 20f);
             float curr = intensity * fade;
             offsetX = (int) ((rand.nextFloat() * 2f - 1f) * curr);
             offsetY = (int) ((rand.nextFloat() * 2f - 1f) * curr);
             duration--;
-        }else {
+        } else {
             offsetX = 0;
             offsetY = 0;
         }
     }
 
-    public boolean isActive() { return  duration > 0;}
+    public boolean isActive() {
+        return duration > 0;
+    }
 
 }

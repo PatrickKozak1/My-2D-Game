@@ -42,7 +42,7 @@ public class WeatherManager {
         this.gp = gp;
         initParticles();
         scheduleNextLightning();
-        weatherDuration = rand.nextInt(3600) +1800;
+        weatherDuration = rand.nextInt(3600) + 1800;
         int[] possible = {CLEAR, CLEAR, RAIN, FOG, STORM};
         currentWeather = possible[rand.nextInt(possible.length)];
     }
@@ -54,7 +54,7 @@ public class WeatherManager {
             rainDrops[i][1] = rand.nextInt(gp.screenHeight);
         }
         snowFlakes = new float[SNOW_COUNT][4];
-        for (int i = 0; i <SNOW_COUNT; i++) {
+        for (int i = 0; i < SNOW_COUNT; i++) {
             snowFlakes[i][0] = rand.nextFloat() * gp.screenWidth;
             snowFlakes[i][1] = rand.nextFloat() * gp.screenHeight;
             snowFlakes[i][2] = 0.5f + rand.nextFloat() * 1.5f;
@@ -66,38 +66,43 @@ public class WeatherManager {
         nextLightning = rand.nextInt(300) + 120;
     }
 
-    public void setWeather(int weather){
-        if (weather == currentWeather)return;
+    public void setWeather(int weather) {
+        if (weather == currentWeather) return;
         currentWeather = weather;
         weatherTimer = 0;
         gp.ui.addMessage(getWeatherName(weather));
     }
 
     public void cycleWeather() {
-        setWeather((currentWeather +1) % 5);
+        setWeather((currentWeather + 1) % 5);
     }
 
     private String getWeatherName(int W) {
-        switch (W){
-            case CLEAR: return "The sky clears up.";
-            case RAIN: return "It starts to rain.";
-            case STORM: return "A storm is approaching!";
-            case FOG: return "Fog rolls in...";
+        switch (W) {
+            case CLEAR:
+                return "The sky clears up.";
+            case RAIN:
+                return "It starts to rain.";
+            case STORM:
+                return "A storm is approaching!";
+            case FOG:
+                return "Fog rolls in...";
 
-        };
+        }
+        ;
         return "";
     }
 
-    public void update(){
+    public void update() {
         weatherTimer++;
         if (weatherTimer >= weatherDuration) {
             weatherTimer = 0;
-            weatherDuration = rand.nextInt(3600) +1800;
+            weatherDuration = rand.nextInt(3600) + 1800;
             int[] possible = {CLEAR, CLEAR, RAIN, FOG, STORM};
             int next;
             do {
                 next = possible[rand.nextInt(possible.length)];
-            }while (next == currentWeather);
+            } while (next == currentWeather);
             setWeather(next);
         }
 
@@ -108,8 +113,7 @@ public class WeatherManager {
     }
 
 
-
-    private void updateRain(){
+    private void updateRain() {
         if (currentWeather != RAIN && currentWeather != STORM) return;
         int speed = (currentWeather == STORM) ? 18 : 12;
         int drift = (currentWeather == STORM) ? 4 : 2;
@@ -128,9 +132,11 @@ public class WeatherManager {
     }
 
 
-
     private void updateLightning() {
-        if (currentWeather != STORM){lightningAlpha = 0; return;}
+        if (currentWeather != STORM) {
+            lightningAlpha = 0;
+            return;
+        }
         lightningTimer++;
         if (lightningTimer >= nextLightning) {
             lightningAlpha = 200;
@@ -158,7 +164,7 @@ public class WeatherManager {
 
     private void updateDarkness() {
         darknessTargetAlpha = (currentWeather == STORM) ? 0.3f
-                : (currentWeather == RAIN)  ? 0.15f : 0f;
+                : (currentWeather == RAIN) ? 0.15f : 0f;
 
         if (darknessAlpha < darknessTargetAlpha) {
             darknessAlpha += 0.004f;
@@ -170,29 +176,29 @@ public class WeatherManager {
         darknessAlpha = Math.max(0f, Math.min(1f, darknessAlpha)); // ← harter Clamp
     }
 
-    public void draw(Graphics2D g2){
+    public void draw(Graphics2D g2) {
         if (currentWeather == CLEAR && fogAlpha <= 0 && darknessAlpha <= 0) return;
 
-        if (darknessAlpha > 0){
+        if (darknessAlpha > 0) {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, darknessAlpha));
-            g2.setColor(new Color(0,0,30));
-            g2.fillRect(0,0,gp.screenWidth,gp.screenHeight);
+            g2.setColor(new Color(0, 0, 30));
+            g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
         }
 
         if (currentWeather == RAIN || currentWeather == STORM) {
             drawRain(g2);
         }
 
-        if (fogAlpha > 0){
+        if (fogAlpha > 0) {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, fogAlpha));
-            g2.setColor(new Color(200,200,210));
-            g2.fillRect(0,0,gp.screenWidth,gp.screenHeight);
+            g2.setColor(new Color(200, 200, 210));
+            g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
         }
 
         if (lightningAlpha > 0) {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, lightningAlpha / 255f));
             g2.setColor(Color.WHITE);
-            g2.fillRect(0,0,gp.screenWidth,gp.screenHeight);
+            g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
         }
 
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
@@ -202,11 +208,11 @@ public class WeatherManager {
         float a = (currentWeather == STORM) ? 0.75f : 0.5f;
         int len = (currentWeather == STORM) ? 14 : 10;
         int dx = (currentWeather == STORM) ? 4 : 2;
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,a));
-        g2.setColor(new Color(174,194,224));
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, a));
+        g2.setColor(new Color(174, 194, 224));
         g2.setStroke(new BasicStroke(1f));
         for (int i = 0; i < RAIN_COUNT; i++) {
-            g2.drawLine(rainDrops[i][0],rainDrops[i][1],
+            g2.drawLine(rainDrops[i][0], rainDrops[i][1],
                     rainDrops[i][0] - dx, rainDrops[i][1] - len);
         }
     }
@@ -215,8 +221,8 @@ public class WeatherManager {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
         g2.setColor(Color.WHITE);
         for (int i = 0; i < SNOW_COUNT; i++) {
-            int size = 2 + (int)(snowFlakes[i][2] * 2);
-            g2.fillOval((int)snowFlakes[i][0], (int)snowFlakes[i][1], size, size);
+            int size = 2 + (int) (snowFlakes[i][2] * 2);
+            g2.fillOval((int) snowFlakes[i][0], (int) snowFlakes[i][1], size, size);
         }
     }
 

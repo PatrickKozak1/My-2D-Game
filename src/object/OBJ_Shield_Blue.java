@@ -12,8 +12,8 @@ public class OBJ_Shield_Blue extends Entity {
 
         type = type_shield;
         name = objName;
-        down1 = setup("/objects/shield_blue",gp.tileSize,gp.tileSize);
-        defenseValue =  4;
+        down1 = setup("/objects/shield_blue", gp.tileSize, gp.tileSize);
+        defenseValue = 4;
         description = "[" + name + "]\nA shiny blue shield.";
         price = 100;
     }

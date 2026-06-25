@@ -31,7 +31,4 @@ public class DataStorage implements Serializable {
     boolean mapObjectOpened[][];
 
 
-
-
-
 }

@@ -31,7 +31,7 @@ public class QuestManager {
         return null;
     }
 
-    public void acceptQuest(String id){
+    public void acceptQuest(String id) {
         Quest q = getQuest(id);
         if (q != null && !q.accepted) {
             q.accepted = true;
@@ -39,38 +39,38 @@ public class QuestManager {
         }
     }
 
-    public void notifyKill(String monsterName){
-        for (Quest q: quests) {
+    public void notifyKill(String monsterName) {
+        for (Quest q : quests) {
             if (!q.accepted || q.completed) continue;
-            if (q.type == Quest.TYPE_KILL && q.targetName.equals(monsterName)){
+            if (q.type == Quest.TYPE_KILL && q.targetName.equals(monsterName)) {
                 q.currentCount++;
                 if (q.currentCount >= q.targetCount) {
                     q.completed = true;
                     gp.ui.addMessage("Quest completed: " + q.title + "!");
                     gp.ui.addMessage("Return to the Old Man for you reward.");
-                }else {
+                } else {
                     gp.ui.addMessage(q.title + ":" + q.currentCount + "/" + q.targetCount);
                 }
             }
         }
     }
 
-    public void notifyCollect(String itemName){
-        for (Quest q: quests) {
+    public void notifyCollect(String itemName) {
+        for (Quest q : quests) {
             if (!q.accepted || q.completed) continue;
-            if (q.type == Quest.TYPE_COLLECT && q.targetName.equals(itemName)){
+            if (q.type == Quest.TYPE_COLLECT && q.targetName.equals(itemName)) {
                 q.currentCount++;
-                if (q.currentCount >= q.targetCount){
+                if (q.currentCount >= q.targetCount) {
                     q.completed = true;
                     gp.ui.addMessage("Quest completed: " + q.title + "!");
-                }else {
+                } else {
                     gp.ui.addMessage(q.title + ":" + q.currentCount + "/" + q.targetCount);
                 }
             }
         }
     }
 
-    public void rewardQuest(Quest q){
+    public void rewardQuest(Quest q) {
         if (q == null || q.rewarded) return;
         q.rewarded = true;
         gp.player.coin += q.rewardCoins;
@@ -82,7 +82,10 @@ public class QuestManager {
     public void draw(Graphics2D g2) {
         boolean hasActive = false;
         for (Quest q : quests) {
-            if (q.accepted && !q.completed) {hasActive = true; break;}
+            if (q.accepted && !q.completed) {
+                hasActive = true;
+                break;
+            }
         }
         if (!hasActive) return;
 
@@ -102,8 +105,8 @@ public class QuestManager {
         g2.drawString("QUESTS", boxX + 20, boxY + 28);
 
         int ty = boxY + 28 + lineH;
-        for (Quest q : quests){
-            if (!q.accepted ||q.rewarded) continue;
+        for (Quest q : quests) {
+            if (!q.accepted || q.rewarded) continue;
             g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 16f));
             g2.setColor(Color.WHITE);
             g2.drawString(q.title, boxX + 20, ty);
@@ -111,13 +114,13 @@ public class QuestManager {
 
             g2.setFont(gp.ui.purisaB.deriveFont(Font.PLAIN, 15f));
             if (q.completed) {
-                g2.setColor(new Color(100,220,100));
+                g2.setColor(new Color(100, 220, 100));
                 g2.drawString("Return to the Old Man", boxX + 24, ty);
-            }else {
-                g2.setColor(new Color(180,180,180));
+            } else {
+                g2.setColor(new Color(180, 180, 180));
                 g2.drawString(q.getProgressText(), boxX + 24, ty);
             }
-            ty += lineH +4;
+            ty += lineH + 4;
         }
     }
 }
